@@ -2,10 +2,9 @@ package me.tangpoo.troller.domain.member.repository;
 
 import java.util.Optional;
 import me.tangpoo.troller.domain.member.entity.Member;
+import me.tangpoo.troller.domain.member.entity.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByUsername(String username);
-
-    Optional<Member> findByEmail(String email);
+public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
+    Optional<RefreshToken> findByMember(Member member);
 }

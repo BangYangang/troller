@@ -23,11 +23,17 @@ public class Member {
     private Long memberId;
 
     @Column(nullable = false, unique = true)
-    private String userId;
-
-    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
     private String password;
+
+    public void update(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 }
