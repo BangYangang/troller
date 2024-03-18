@@ -16,7 +16,7 @@ import me.tangpoo.troller.domain.board.entity.Board;
 @NoArgsConstructor
 public class Todo {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 

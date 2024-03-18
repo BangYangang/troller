@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,10 +21,11 @@ import me.tangpoo.troller.domain.todo.entity.Todo;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Table(name = "cards")
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "card_id")
+    @Column(name = "cards_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,7 +35,7 @@ public class Card {
     private String name;
     private String description;
     private String color;
-    private int order;
+    private int cardOrder;
     private LocalDateTime deadline;
 
 

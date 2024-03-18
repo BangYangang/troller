@@ -32,7 +32,7 @@ public class Comment {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
+    @JoinColumn(name = "cards_id")
     private Card card;
 
     private String content;
