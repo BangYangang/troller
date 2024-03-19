@@ -13,42 +13,43 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ExceptionForm> NoSuchElementException(NoSuchElementException e){
+    public ResponseEntity<ExceptionForm> NoSuchElementException(NoSuchElementException e) {
         return ResponseEntity.badRequest()
             .body(new ExceptionForm(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
                 e.getMessage()));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ExceptionForm> AccessDeniedException(AccessDeniedException e){
+    public ResponseEntity<ExceptionForm> AccessDeniedException(AccessDeniedException e) {
         return ResponseEntity.badRequest()
             .body(new ExceptionForm(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
                 e.getMessage()));
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<ExceptionForm> NullPointerException(NullPointerException e){
+    public ResponseEntity<ExceptionForm> NullPointerException(NullPointerException e) {
         return ResponseEntity.badRequest()
             .body(new ExceptionForm(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
                 e.getMessage()));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ExceptionForm> DataIntegrityViolationException(DataIntegrityViolationException e){
+    public ResponseEntity<ExceptionForm> DataIntegrityViolationException(
+        DataIntegrityViolationException e) {
         return ResponseEntity.badRequest()
             .body(new ExceptionForm(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
                 e.getMessage()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ExceptionForm> IllegalArgumentException(IllegalArgumentException e){
+    public ResponseEntity<ExceptionForm> IllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.badRequest()
             .body(new ExceptionForm(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST,
                 e.getMessage()));
     }
 
     @ExceptionHandler(LoginException.class)
-    public ResponseEntity<ExceptionForm> LoginException(LoginException e){
+    public ResponseEntity<ExceptionForm> LoginException(LoginException e) {
         return ResponseEntity.badRequest()
             .body(new ExceptionForm((HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST,
                 e.getMessage()));

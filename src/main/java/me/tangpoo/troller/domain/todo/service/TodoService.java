@@ -3,7 +3,8 @@ package me.tangpoo.troller.domain.todo.service;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.board.entity.Board;
 import me.tangpoo.troller.domain.board.repository.BoardRepository;
-import me.tangpoo.troller.domain.todo.dto.ToDoResponse;
+import me.tangpoo.troller.domain.todo.dto.ToDoResponseDto;
+import me.tangpoo.troller.domain.todo.dto.ToDoResponseDto;
 import me.tangpoo.troller.domain.todo.dto.TodoMoveRequestDto;
 import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 import me.tangpoo.troller.domain.todo.entity.Todo;
@@ -39,14 +40,14 @@ public class TodoService {
      * @param boardId 보드 아이디
      * @return todo 조회 결과
      */
-    public List<ToDoResponse> getTodos(Long boardId) {
+    public List<ToDoResponseDto> getTodos(Long boardId) {
 
         List<Todo> todoList = todoRepository.findByBoard_BoardId(boardId);
 
-        List<ToDoResponse> toDoResponseList = new ArrayList<>();
+        List<ToDoResponseDto> toDoResponseList = new ArrayList<>();
 
         for (Todo todo : todoList) {
-            toDoResponseList.add(new ToDoResponse(todo));
+            toDoResponseList.add(new ToDoResponseDto(todo));
         }
         return toDoResponseList;
 

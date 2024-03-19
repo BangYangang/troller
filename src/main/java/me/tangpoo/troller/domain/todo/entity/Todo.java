@@ -30,7 +30,7 @@ public class Todo {
 
     private Long todoOrder;
 
-    public boolean isNotBoardMatch(Board board){
+    public boolean isNotBoardMatch(Board board) {
         return !this.board.equals(board);
     }
 

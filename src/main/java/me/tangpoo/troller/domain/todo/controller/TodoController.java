@@ -1,7 +1,7 @@
 package me.tangpoo.troller.domain.todo.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.tangpoo.troller.domain.todo.dto.ToDoResponse;
+import me.tangpoo.troller.domain.todo.dto.ToDoResponseDto;
 import me.tangpoo.troller.domain.todo.dto.TodoMoveRequestDto;
 import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 import me.tangpoo.troller.domain.todo.service.TodoService;
@@ -28,23 +28,25 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ToDoResponse>> getTodos(@PathVariable Long board_id) {
-        List<ToDoResponse> todoList = todoService.getTodos(board_id);
+    public ResponseEntity<List<ToDoResponseDto>> getTodos(@PathVariable Long board_id) {
+        List<ToDoResponseDto> todoList = todoService.getTodos(board_id);
         return new ResponseEntity<>(todoList, HttpStatus.OK);
     }
 
 
     @PutMapping("/{todo_id}")
     public ResponseEntity<String> updateTodo(@PathVariable Long board_id,
-        @PathVariable Long todo_id, @RequestBody TodoRequestDto todoRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        todoService.updateTodo(board_id, todo_id, todoRequestDto,userDetails.getMember().getMemberId());
+        @PathVariable Long todo_id, @RequestBody TodoRequestDto todoRequestDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        todoService.updateTodo(board_id, todo_id, todoRequestDto,
+            userDetails.getMember().getMemberId());
         return new ResponseEntity<>("Todo 수정 성공", HttpStatus.OK);
     }
 
     @DeleteMapping("/{todo_id}")
     public ResponseEntity<String> deleteTodo(@PathVariable Long board_id,
-        @PathVariable Long todo_id,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        todoService.deleteTodo(board_id, todo_id,userDetails.getMember().getMemberId());
+        @PathVariable Long todo_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        todoService.deleteTodo(board_id, todo_id, userDetails.getMember().getMemberId());
         return new ResponseEntity<>("Todo 삭제 성공", HttpStatus.NO_CONTENT);
     }
 

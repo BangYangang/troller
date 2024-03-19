@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Builder
 public class ExceptionForm {
+
     private int statusCode;
     private HttpStatus state;
     private String message;

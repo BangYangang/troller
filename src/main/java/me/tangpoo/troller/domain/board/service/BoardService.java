@@ -7,12 +7,19 @@ import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.board.dto.BoardRequestDto;
 import me.tangpoo.troller.domain.board.dto.BoardResponseDto;
+import me.tangpoo.troller.domain.board.dto.BoardsResponseDto;
+import me.tangpoo.troller.domain.board.dto.CardResponse;
+import me.tangpoo.troller.domain.board.dto.TodoResponse;
 import me.tangpoo.troller.domain.board.entity.Board;
 import me.tangpoo.troller.domain.board.repository.BoardRepository;
+import me.tangpoo.troller.domain.card.entity.Card;
+import me.tangpoo.troller.domain.card.repository.CardRepository;
 import me.tangpoo.troller.domain.invite.entity.Invite;
 import me.tangpoo.troller.domain.invite.repository.InviteRepository;
 import me.tangpoo.troller.domain.member.entity.Member;
 import me.tangpoo.troller.domain.member.repository.MemberRepository;
+import me.tangpoo.troller.domain.todo.entity.Todo;
+import me.tangpoo.troller.domain.todo.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +29,8 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final InviteRepository inviteRepository;
+    private final TodoRepository todoRepository;
+    private final CardRepository cardRepository;
 
 
     public void createBoard(BoardRequestDto requestDto, Member member) {
@@ -29,14 +38,32 @@ public class BoardService {
     }
 
     public BoardResponseDto readBoard(Member member, Long boardId) {
+        //검증 단계
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new NoSuchElementException("보드가 존재하지 않습니다."));
-        Member master = memberRepository.findById(member.getMemberId())
+        Member user = memberRepository.findById(member.getMemberId())
             .orElseThrow(() -> new NoSuchElementException("가입되어 있지 않습니다."));
-        if (!(board.getMember()).equals(master)) {
-            throw new IllegalArgumentException("본인의 보드가 아닙니다.");
+        Invite invite = inviteRepository.findByBoard_BoardIdAndMember_MemberId(board.getBoardId(),
+            user.getMemberId());
+        if (!(board.getMember()).equals(user)) {
+            if (!(invite.getMember().equals(user))) {
+                throw new IllegalArgumentException("본인의 보드가 아닙니다.");
+            }
         }
-        return new BoardResponseDto(board);
+        //정보 담기
+        List<Todo> todos = todoRepository.findByBoard_BoardId(boardId);
+        List<TodoResponse> todosR = new ArrayList<>();
+        List<CardResponse> cardsR = new ArrayList<>();
+        List<Card> cards = new ArrayList<>();
+        for (Todo todo : todos) {
+            todosR.add(new TodoResponse(todo));
+            cards.addAll(cardRepository.findAllByTodo(todo));
+        }
+        for (Card card : cards) {
+            cardsR.add(new CardResponse(card));
+        }
+
+        return new BoardResponseDto(board, todosR, cardsR);
     }
 
     @Transactional
@@ -62,17 +89,17 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    public List<BoardResponseDto> readAllBoard(Member member) {
+    public List<BoardsResponseDto> readAllBoard(Member member) {
         Member register = memberRepository.findById(member.getMemberId())
             .orElseThrow(() -> new NoSuchElementException("멤버를 찾을 수 없습니다."));
-        List<BoardResponseDto> boards = new ArrayList<>();
+        List<BoardsResponseDto> boards = new ArrayList<>();
         List<Board> ownBoards = boardRepository.findAllByMember(register);
         List<Invite> invites = inviteRepository.findAllByMember(register);
         for (Board board : ownBoards) {
-            boards.add((new BoardResponseDto(board)));
+            boards.add((new BoardsResponseDto(board)));
         }
         for (Invite invite : invites) {
-            boards.add(new BoardResponseDto(invite.getBoard()));
+            boards.add(new BoardsResponseDto(invite.getBoard()));
         }
 
         return boards;
