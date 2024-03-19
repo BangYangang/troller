@@ -1,16 +1,26 @@
 package me.tangpoo.troller.global.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import javax.security.auth.login.LoginException;
+import me.tangpoo.troller.global.exception.custom.EntityNotMatchException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> validExceptionHandler(MethodArgumentNotValidException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+    }
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ExceptionForm> NoSuchElementException(NoSuchElementException e) {
@@ -50,6 +60,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(LoginException.class)
     public ResponseEntity<ExceptionForm> LoginException(LoginException e) {
+        return ResponseEntity.badRequest()
+            .body(new ExceptionForm((HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST,
+                e.getMessage()));
+    }
+
+    @ExceptionHandler({EntityNotFoundException.class,
+        EntityNotMatchException.class
+    })
+    public ResponseEntity<ExceptionForm> entityNotFoundExceptionHandler(LoginException e) {
         return ResponseEntity.badRequest()
             .body(new ExceptionForm((HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST,
                 e.getMessage()));
