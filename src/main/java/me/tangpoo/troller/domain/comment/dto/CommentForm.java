@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CreateCommentForm {
+public class CommentForm {
 
   @NotBlank(message = "내용을 입력해야 합니다.")
   private String content;
