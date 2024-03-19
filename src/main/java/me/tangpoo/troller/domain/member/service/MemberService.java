@@ -9,10 +9,12 @@ import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.member.dto.MemberResponse;
 import me.tangpoo.troller.domain.member.dto.MemberRequest;
+import me.tangpoo.troller.domain.member.dto.TokenDto;
 import me.tangpoo.troller.domain.member.entity.Member;
 import me.tangpoo.troller.domain.member.entity.RefreshToken;
 import me.tangpoo.troller.domain.member.repository.MemberRepository;
 import me.tangpoo.troller.domain.member.repository.RefreshTokenRepository;
+import me.tangpoo.troller.global.JwtUtil;
 import org.springframework.dao.DataIntegrityViolationException;
 import me.tangpoo.troller.domain.member.repository.RefreshTokenRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -29,6 +31,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final JPAQueryFactory queryFactory;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public void saveMember(MemberRequest memberRequest){
@@ -60,7 +63,7 @@ public class MemberService {
 
 
     @Transactional
-    public void updateMember(Long memberId, MemberRequest memberRequest) {
+    public TokenDto updateMember(Long memberId, MemberRequest memberRequest) {
         Member findMember = getFindMember(memberId);
 
         findMember.update(
@@ -68,6 +71,20 @@ public class MemberService {
             memberRequest.getEmail(),
             passwordEncoder.encode(memberRequest.getPassword())
         );
+
+        String accessToken = jwtUtil.createToken(findMember);
+        String refreshToken = jwtUtil.createRefreshToken(findMember);
+        RefreshToken tokenEntity = RefreshToken.builder()
+            .refreshToken(refreshToken)
+            .member(findMember)
+            .build();
+
+        refreshTokenRepository.findByMember(findMember).ifPresentOrElse(
+            (findTokenPair) -> findTokenPair.updateToken(refreshToken),
+            () -> refreshTokenRepository.save(tokenEntity)
+        );
+
+        return new TokenDto(accessToken, refreshToken);
     }
 
     @Transactional
