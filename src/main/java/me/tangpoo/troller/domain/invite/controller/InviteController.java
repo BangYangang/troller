@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/boards")
 public class InviteController {
+
     private final InviteService inviteService;
 
     @PostMapping("/{board_id}/invite")
-    public ResponseEntity<String> createBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody InviteRequestDto requestDto, @PathVariable Long board_id){
+    public ResponseEntity<String> createBoard(@AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestBody InviteRequestDto requestDto, @PathVariable Long board_id) {
         inviteService.invite(board_id, requestDto, userDetails.getMember());
         return new ResponseEntity<>("초대 완료", HttpStatus.CREATED);
     }

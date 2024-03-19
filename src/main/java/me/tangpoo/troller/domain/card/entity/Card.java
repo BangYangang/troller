@@ -23,13 +23,14 @@ import me.tangpoo.troller.domain.todo.entity.Todo;
 @Builder
 @Table(name = "cards")
 public class Card {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cards_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="todo_id")
+    @JoinColumn(name = "todo_id")
     private Todo todo;
 
     private String name;

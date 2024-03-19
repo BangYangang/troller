@@ -35,7 +35,7 @@ public class RefreshToken {
         this.member = member;
     }
 
-    public void updateToken(String refreshToken){
+    public void updateToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 }

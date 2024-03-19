@@ -12,6 +12,7 @@ public class BoardResponseDto {
     private String title;
     private String description;
     private String color;
+
     public BoardResponseDto(Board board) {
         this.title = board.getTitle();
         this.description = board.getDescription();

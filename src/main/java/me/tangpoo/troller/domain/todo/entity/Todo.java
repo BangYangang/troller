@@ -15,6 +15,7 @@ import me.tangpoo.troller.domain.board.entity.Board;
 @Getter
 @NoArgsConstructor
 public class Todo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,7 +28,6 @@ public class Todo {
     private String todoName;
 
     private String todoOrder;
-
 
 
 }

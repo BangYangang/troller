@@ -27,7 +27,7 @@ public class AuthService {
     public TokenDto login(LoginRequest loginRequest) {
         Member member = findMemberByUsername(loginRequest.getUsername());
 
-        if(!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())){
+        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
             throw new AccessDeniedException("비밀번호가 일치하지 않습니다.");
         }
 
@@ -47,7 +47,7 @@ public class AuthService {
     }
 
     public void logout(Member member, String refreshToken) {
-        if(!jwtUtil.validateToken(refreshToken)) {
+        if (!jwtUtil.validateToken(refreshToken)) {
             throw new UnAuthorizationException("[ERROR] 유효하지 않은 Refresh Token 입니다.");
         }
 
@@ -56,7 +56,7 @@ public class AuthService {
             () -> new NoSuchElementException("유저 정보가 일치하지 않습니다.")
         ).getUsername();
 
-        if(!tokenUsername.equals(entityUsername)){
+        if (!tokenUsername.equals(entityUsername)) {
             throw new UnAuthorizationException("[ERROR] 로그인한 사용자의 Refresh Token 이 아닙니다.");
         }
 
@@ -69,7 +69,7 @@ public class AuthService {
 
     private Member findMemberByUsername(String username) {
         return memberRepository.findByUsername(username).orElseThrow(
-                () -> new NoSuchElementException("유저 정보가 일치하지 않습니다.")
-            );
+            () -> new NoSuchElementException("유저 정보가 일치하지 않습니다.")
+        );
     }
 }

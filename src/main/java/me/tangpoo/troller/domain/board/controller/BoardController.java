@@ -26,32 +26,35 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping
-    public ResponseEntity<String> createBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto requestDto){
+    public ResponseEntity<String> createBoard(@AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestBody BoardRequestDto requestDto) {
         boardService.createBoard(requestDto, userDetails.getMember());
         return new ResponseEntity<>("보드 생성 완료", HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<BoardResponseDto> readAllBoard(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public List<BoardResponseDto> readAllBoard(
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.readAllBoard(userDetails.getMember());
     }
 
     @GetMapping("/{board_id}")
-    public BoardResponseDto readBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long board_id){
+    public BoardResponseDto readBoard(@AuthenticationPrincipal UserDetailsImpl userDetails,
+        @PathVariable Long board_id) {
         return boardService.readBoard(userDetails.getMember(), board_id);
     }
 
 
     @PutMapping("/{board_id}")
     public ResponseEntity<String> updateBoard(@AuthenticationPrincipal UserDetailsImpl userDetails,
-        @PathVariable Long board_id, @RequestBody BoardRequestDto requestDto){
+        @PathVariable Long board_id, @RequestBody BoardRequestDto requestDto) {
         boardService.updateBoard(userDetails.getMember(), requestDto, board_id);
         return new ResponseEntity<>("보드 수정 완료", HttpStatus.OK);
     }
 
     @DeleteMapping("/{board_id}")
     public ResponseEntity<String> deleteBoard(@AuthenticationPrincipal UserDetailsImpl userDetails,
-        @PathVariable Long board_id){
+        @PathVariable Long board_id) {
         boardService.deleteBoard(userDetails.getMember(), board_id);
         return new ResponseEntity<>("보드 삭제 완료", HttpStatus.NO_CONTENT);
     }
