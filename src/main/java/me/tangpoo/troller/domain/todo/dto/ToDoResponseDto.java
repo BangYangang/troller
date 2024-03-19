@@ -4,11 +4,11 @@ import lombok.Getter;
 import me.tangpoo.troller.domain.todo.entity.Todo;
 
 @Getter
-public class ToDoResponse {
+public class ToDoResponseDto {
 
     private String todoName;
 
-    public ToDoResponse(Todo todo) {
+    public ToDoResponseDto(Todo todo) {
         this.todoName = todo.getTodoName();
     }
 

@@ -1,7 +1,7 @@
 package me.tangpoo.troller.domain.todo.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.tangpoo.troller.domain.todo.dto.ToDoResponse;
+import me.tangpoo.troller.domain.todo.dto.ToDoResponseDto;
 import me.tangpoo.troller.domain.todo.dto.TodoMoveRequestDto;
 import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 import me.tangpoo.troller.domain.todo.service.TodoService;
@@ -28,8 +28,8 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ToDoResponse>> getTodos(@PathVariable Long board_id) {
-        List<ToDoResponse> todoList = todoService.getTodos(board_id);
+    public ResponseEntity<List<ToDoResponseDto>> getTodos(@PathVariable Long board_id) {
+        List<ToDoResponseDto> todoList = todoService.getTodos(board_id);
         return new ResponseEntity<>(todoList, HttpStatus.OK);
     }
 
