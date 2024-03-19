@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.tangpoo.troller.domain.card.dto.ResponseCardForm;
+import me.tangpoo.troller.domain.card.dto.UpdateCardForm;
 import me.tangpoo.troller.domain.todo.entity.Todo;
 
 @Entity
@@ -58,9 +59,17 @@ public class Card {
         .build();
   }
 
+  public void update(UpdateCardForm dto) {
+    this.name = dto.getName();
+    this.description = dto.getDescription();
+    this.color = dto.getColor();
+    this.deadline = dto.getDeadline() == null ? this.deadline : dto.getDeadline();
+  }
+
   public boolean isNotTodoMatch(Todo todo) {
     return !this.todo.equals(todo);
   }
+
 
 
 }
