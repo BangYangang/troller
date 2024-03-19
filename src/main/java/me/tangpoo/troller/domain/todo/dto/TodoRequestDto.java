@@ -8,9 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class TodoRequestDto {
-    private String todoName;
 
-    public TodoRequestDto(String todoName) {
-        this.todoName = todoName;
-    }
+    private String todoName;
 }
