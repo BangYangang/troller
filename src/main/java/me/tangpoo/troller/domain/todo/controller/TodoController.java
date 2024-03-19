@@ -1,8 +1,6 @@
 package me.tangpoo.troller.domain.todo.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import me.tangpoo.troller.domain.todo.dto.ResponseForm;
 import me.tangpoo.troller.domain.todo.dto.ToDoResponse;
 import me.tangpoo.troller.domain.todo.dto.TodoMoveRequestDto;
 import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
