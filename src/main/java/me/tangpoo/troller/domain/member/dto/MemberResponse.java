@@ -1,17 +1,14 @@
 package me.tangpoo.troller.domain.member.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class MemberResponse {
 
-    private String userId;
     private String username;
-
-    public MemberResponse(String userId, String username) {
-        this.userId = userId;
-        this.username = username;
-    }
+    private String email;
 }
