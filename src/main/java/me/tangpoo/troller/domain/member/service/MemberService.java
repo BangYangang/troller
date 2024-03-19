@@ -12,6 +12,7 @@ import me.tangpoo.troller.domain.member.dto.MemberRequest;
 import me.tangpoo.troller.domain.member.entity.Member;
 import me.tangpoo.troller.domain.member.entity.RefreshToken;
 import me.tangpoo.troller.domain.member.repository.MemberRepository;
+import me.tangpoo.troller.domain.member.repository.RefreshTokenRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import me.tangpoo.troller.domain.member.repository.RefreshTokenRepository;
 import org.springframework.dao.DataIntegrityViolationException;

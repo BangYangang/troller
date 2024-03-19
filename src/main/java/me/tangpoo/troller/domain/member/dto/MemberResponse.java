@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MemberResponse {
-
     private String username;
     private String email;
 }
