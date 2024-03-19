@@ -5,8 +5,10 @@ import me.tangpoo.troller.domain.todo.dto.ToDoResponse;
 import me.tangpoo.troller.domain.todo.dto.TodoMoveRequestDto;
 import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 import me.tangpoo.troller.domain.todo.service.TodoService;
+import me.tangpoo.troller.global.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,15 +36,15 @@ public class TodoController {
 
     @PutMapping("/{board_id}/todo/{todo_id}")
     public ResponseEntity<String> updateTodo(@PathVariable Long board_id,
-        @PathVariable Long todo_id, @RequestBody TodoRequestDto todoRequestDto) {
-        todoService.updateTodo(board_id, todo_id, todoRequestDto);
+        @PathVariable Long todo_id, @RequestBody TodoRequestDto todoRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        todoService.updateTodo(board_id, todo_id, todoRequestDto,userDetails.getMember().getMemberId());
         return new ResponseEntity<>("Todo 수정 성공", HttpStatus.OK);
     }
 
     @DeleteMapping("/{board_id}/todo/{todo_id}")
     public ResponseEntity<String> deleteTodo(@PathVariable Long board_id,
-        @PathVariable Long todo_id) {
-        todoService.deleteTodo(board_id, todo_id);
+        @PathVariable Long todo_id,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        todoService.deleteTodo(board_id, todo_id,userDetails.getMember().getMemberId());
         return new ResponseEntity<>("Todo 삭제 성공", HttpStatus.NO_CONTENT);
     }
 

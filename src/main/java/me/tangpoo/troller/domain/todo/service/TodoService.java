@@ -54,14 +54,17 @@ public class TodoService {
 
     /**
      * Todo 수정
+     *  @param boardId        보드 아이디
      *
-     * @param boardId        보드 아이디
      * @param todoId         todo 아이디
      * @param todoRequestDto 수정 요청 정보
+     * @param memberId
      */
     @Transactional
-    public void updateTodo(Long boardId, Long todoId, TodoRequestDto todoRequestDto) {
-        Todo findTodo = findTodo(boardId, todoId);
+    public void updateTodo(Long boardId, Long todoId, TodoRequestDto todoRequestDto,
+        Long memberId) {
+        // 해당 유저의 보드, todo 확인
+        Todo findTodo = findTodo(boardId, todoId, memberId);
 
         findTodo.update(todoRequestDto);
 
@@ -74,8 +77,10 @@ public class TodoService {
      * @param todoId  todo 아이디
      */
     @Transactional
-    public void deleteTodo(Long boardId, Long todoId) {
-        Todo findTodo = findTodo(boardId, todoId);
+    public void deleteTodo(Long boardId, Long todoId, Long memberId) {
+        // 해당 유저의 보드, todo 확인
+        Todo findTodo = findTodo(boardId, todoId, memberId);
+
         todoRepository.delete(findTodo);
     }
 
@@ -86,9 +91,13 @@ public class TodoService {
     }
 
 
-    private Todo findTodo(Long boardId, Long todoId) {
+    private Todo findTodo(Long boardId, Long todoId, Long memberId) {
         Todo findTodo = todoRepository.findById(todoId).orElseThrow(() ->
             new IllegalArgumentException("선택한 todo는 존재하지 않습니다."));
+
+        if (!findTodo.getBoard().getMember().getMemberId().equals(memberId)) {
+            throw new IllegalArgumentException("자신의 보드가 아닙니다.");
+        }
 
         if (!findTodo.getBoard().getBoardId().equals(boardId)) {
             throw new IllegalArgumentException("선택한 보드의 todo가 아닙니다.");
@@ -101,8 +110,6 @@ public class TodoService {
     public void moveTodo(Long boardId, TodoMoveRequestDto todoRequestDto) {
 
         List<Todo> todoList = todoRepository.findByBoard_BoardId(boardId);
-//
-//        List<Long> todoIdList = todoList.stream().map(Todo::getId).toList();
 
         for (TodoMoveRequestDto request : todoRequestDto.getDtoList()) {
 
