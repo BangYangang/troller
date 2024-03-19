@@ -132,7 +132,7 @@ public class CommentService {
   }
 
   private void inviteCheckValidate(Long boardId, Member member) {
-    if (!inviteRepository.existsByBoard_BoardIdAndMember_MemberId(boardId, member.getMemberId())) {
+    if (!inviteRepository.existsByBoard_BoardIdAndMember_Username(boardId, member.getUsername())) {
       throw new EntityExistsException("권한이 없는 유저입니다.");
     }
   }
