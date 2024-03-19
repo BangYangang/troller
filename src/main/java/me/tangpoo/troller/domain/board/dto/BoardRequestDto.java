@@ -1,5 +1,12 @@
 package me.tangpoo.troller.domain.board.dto;
 
-public class BoardRequestDto {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
+public class BoardRequestDto {
+    private String title;
+    private String description;
+    private String color;
 }
