@@ -1,11 +1,21 @@
 package me.tangpoo.troller.domain.member.service;
 
+import static com.querydsl.core.types.Projections.fields;
+import static me.tangpoo.troller.domain.member.entity.QMember.member;
+
+import com.querydsl.core.QueryFactory;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.member.dto.MemberResponse;
 import me.tangpoo.troller.domain.member.dto.MemberRequest;
 import me.tangpoo.troller.domain.member.entity.Member;
+import me.tangpoo.troller.domain.member.entity.RefreshToken;
 import me.tangpoo.troller.domain.member.repository.MemberRepository;
+import me.tangpoo.troller.domain.member.repository.RefreshTokenRepository;
+import org.springframework.dao.DataIntegrityViolationException;
+import me.tangpoo.troller.domain.member.repository.RefreshTokenRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +27,13 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JPAQueryFactory queryFactory;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
-    public void saveMember(MemberRequest memberRequest) {
+    public void saveMember(MemberRequest memberRequest){
+        validateDuplicateUsername(memberRequest.getUsername());
+
         Member member = Member.builder()
             .username(memberRequest.getUsername())
             .email(memberRequest.getEmail())
@@ -29,10 +43,19 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public MemberResponse getMember(Long memberId) {
-        Member findMember = getFindMember(memberId);
+    private void validateDuplicateUsername(String username) {
+        if(memberRepository.findByUsername(username).isPresent()){
+            throw new DataIntegrityViolationException("이미 존재하는 회원명 입니다.");
+        }
+    }
 
-        return new MemberResponse(findMember.getUsername(), findMember.getUsername());
+    public MemberResponse getMember(Long memberId) {
+        return queryFactory.select(fields(MemberResponse.class,
+            member.username,
+            member.email))
+            .from(member)
+            .where(member.memberId.eq(memberId))
+            .fetchOne();
     }
 
 
@@ -40,9 +63,10 @@ public class MemberService {
     public void updateMember(Long memberId, MemberRequest memberRequest) {
         Member findMember = getFindMember(memberId);
 
-        findMember.update(memberRequest.getUsername(),
+        findMember.update(
+            memberRequest.getUsername(),
             memberRequest.getEmail(),
-            memberRequest.getPassword()
+            passwordEncoder.encode(memberRequest.getPassword())
         );
     }
 
