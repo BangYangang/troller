@@ -7,7 +7,7 @@ import me.tangpoo.troller.domain.todo.dto.ToDoResponse;
 import me.tangpoo.troller.domain.todo.dto.TodoMoveRequestDto;
 import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 import me.tangpoo.troller.domain.todo.entity.Todo;
-import me.tangpoo.troller.domain.todo.repository.Todorepository;
+import me.tangpoo.troller.domain.todo.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TodoService {
 
-    private final Todorepository todorepository;
+    private final TodoRepository todoRepository;
     private final BoardRepository boardRepository;
 
     /**
@@ -29,7 +29,7 @@ public class TodoService {
      */
     public void createTodo(Long boardId, TodoRequestDto requestDto) {
         Board board = findBoardId(boardId);
-        todorepository.save(new Todo(board, requestDto.getTodoName()));
+        todoRepository.save(new Todo(board, requestDto.getTodoName()));
     }
 
 
@@ -40,7 +40,8 @@ public class TodoService {
      * @return todo 조회 결과
      */
     public List<ToDoResponse> getTodos(Long boardId) {
-        List<Todo> todoList = todorepository.findByBoard_BoardId(boardId);
+
+        List<Todo> todoList = todoRepository.findByBoard_BoardId(boardId);
 
         List<ToDoResponse> toDoResponseList = new ArrayList<>();
 
@@ -75,7 +76,7 @@ public class TodoService {
     @Transactional
     public void deleteTodo(Long boardId, Long todoId) {
         Todo findTodo = findTodo(boardId, todoId);
-        todorepository.delete(findTodo);
+        todoRepository.delete(findTodo);
     }
 
 
@@ -86,7 +87,7 @@ public class TodoService {
 
 
     private Todo findTodo(Long boardId, Long todoId) {
-        Todo findTodo = todorepository.findById(todoId).orElseThrow(() ->
+        Todo findTodo = todoRepository.findById(todoId).orElseThrow(() ->
             new IllegalArgumentException("선택한 todo는 존재하지 않습니다."));
 
         if (!findTodo.getBoard().getBoardId().equals(boardId)) {
@@ -99,7 +100,7 @@ public class TodoService {
     @Transactional
     public void moveTodo(Long boardId, TodoMoveRequestDto todoRequestDto) {
 
-        List<Todo> todoList = todorepository.findByBoard_BoardId(boardId);
+        List<Todo> todoList = todoRepository.findByBoard_BoardId(boardId);
 //
 //        List<Long> todoIdList = todoList.stream().map(Todo::getId).toList();
 
