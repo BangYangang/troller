@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TodoService {
 
-    private final TodoRepository todorepository;
+    private final TodoRepository todoRepository;
     private final BoardRepository boardRepository;
 
     /**
@@ -29,7 +29,7 @@ public class TodoService {
      */
     public void createTodo(Long boardId, TodoRequestDto requestDto) {
         Board board = findBoardId(boardId);
-        todorepository.save(new Todo(board, requestDto.getTodoName()));
+        todoRepository.save(new Todo(board, requestDto.getTodoName()));
     }
 
 
@@ -40,7 +40,8 @@ public class TodoService {
      * @return todo 조회 결과
      */
     public List<ToDoResponse> getTodos(Long boardId) {
-        List<Todo> todoList = todorepository.findByBoard_BoardId(boardId);
+
+        List<Todo> todoList = todoRepository.findByBoard_BoardId(boardId);
 
         List<ToDoResponse> toDoResponseList = new ArrayList<>();
 
@@ -53,14 +54,17 @@ public class TodoService {
 
     /**
      * Todo 수정
+     *  @param boardId        보드 아이디
      *
-     * @param boardId        보드 아이디
      * @param todoId         todo 아이디
      * @param todoRequestDto 수정 요청 정보
+     * @param memberId
      */
     @Transactional
-    public void updateTodo(Long boardId, Long todoId, TodoRequestDto todoRequestDto) {
-        Todo findTodo = findTodo(boardId, todoId);
+    public void updateTodo(Long boardId, Long todoId, TodoRequestDto todoRequestDto,
+        Long memberId) {
+        // 해당 유저의 보드, todo 확인
+        Todo findTodo = findTodo(boardId, todoId, memberId);
 
         findTodo.update(todoRequestDto);
 
@@ -73,9 +77,11 @@ public class TodoService {
      * @param todoId  todo 아이디
      */
     @Transactional
-    public void deleteTodo(Long boardId, Long todoId) {
-        Todo findTodo = findTodo(boardId, todoId);
-        todorepository.delete(findTodo);
+    public void deleteTodo(Long boardId, Long todoId, Long memberId) {
+        // 해당 유저의 보드, todo 확인
+        Todo findTodo = findTodo(boardId, todoId, memberId);
+
+        todoRepository.delete(findTodo);
     }
 
 
@@ -85,9 +91,13 @@ public class TodoService {
     }
 
 
-    private Todo findTodo(Long boardId, Long todoId) {
-        Todo findTodo = todorepository.findById(todoId).orElseThrow(() ->
+    private Todo findTodo(Long boardId, Long todoId, Long memberId) {
+        Todo findTodo = todoRepository.findById(todoId).orElseThrow(() ->
             new IllegalArgumentException("선택한 todo는 존재하지 않습니다."));
+
+        if (!findTodo.getBoard().getMember().getMemberId().equals(memberId)) {
+            throw new IllegalArgumentException("자신의 보드가 아닙니다.");
+        }
 
         if (!findTodo.getBoard().getBoardId().equals(boardId)) {
             throw new IllegalArgumentException("선택한 보드의 todo가 아닙니다.");
@@ -99,9 +109,7 @@ public class TodoService {
     @Transactional
     public void moveTodo(Long boardId, TodoMoveRequestDto todoRequestDto) {
 
-        List<Todo> todoList = todorepository.findByBoard_BoardId(boardId);
-//
-//        List<Long> todoIdList = todoList.stream().map(Todo::getId).toList();
+        List<Todo> todoList = todoRepository.findByBoard_BoardId(boardId);
 
         for (TodoMoveRequestDto request : todoRequestDto.getDtoList()) {
 
