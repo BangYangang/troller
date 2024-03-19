@@ -8,7 +8,7 @@ public class ToDoResponse {
 
     private String todoName;
 
-    public ToDoResponse(Todo todo){
+    public ToDoResponse(Todo todo) {
         this.todoName = todo.getTodoName();
     }
 
