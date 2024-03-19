@@ -37,7 +37,7 @@ public class CardService {
             .name(dto.getName())
             .description(dto.getDescription())
             .build()
-        );
+    );
 
     return "카드 작성을 완료했습니다.";
   }
@@ -61,11 +61,9 @@ public class CardService {
     boardMatchValidate(todo, board);
     todoMatchValidate(card, todo);
 
-
     cardRepository.delete(card);
     return "삭제가 완료되었습니다!";
   }
-
 
 
   private Card findCardBy(Long cardId) {
@@ -87,13 +85,13 @@ public class CardService {
   }
 
   private void boardMatchValidate(Todo todo, Board board) {
-    if(todo.isNotBoardMatch(board)){
+    if (todo.isNotBoardMatch(board)) {
       throw new EntityNotMatchException("해당 보드에 속한 컬럼이 아닙니다.");
     }
   }
 
   private void todoMatchValidate(Card card, Todo todo) {
-    if(card.isNotTodoMatch(todo)){
+    if (card.isNotTodoMatch(todo)) {
       throw new EntityNotMatchException("해당 컬럼에 속한 카드가 아닙니다.");
     }
   }

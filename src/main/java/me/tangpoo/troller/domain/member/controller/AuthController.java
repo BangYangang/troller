@@ -26,7 +26,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signin")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest){
         TokenDto token = authService.login(loginRequest);
 
         return ResponseEntity.ok()
@@ -39,7 +39,7 @@ public class AuthController {
     public ResponseEntity<String> logout(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @RequestHeader(REFRESH_TOKEN) String refreshToken
-    ) {
+    ){
         authService.logout(userDetails.getMember(), refreshToken);
 
         return ResponseEntity.ok()
