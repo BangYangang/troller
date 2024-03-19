@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.tangpoo.troller.domain.card.dto.ResponseCardForm;
 import me.tangpoo.troller.domain.todo.entity.Todo;
 
 @Entity
@@ -23,20 +24,43 @@ import me.tangpoo.troller.domain.todo.entity.Todo;
 @Builder
 @Table(name = "cards")
 public class Card {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cards_id")
-    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="todo_id")
-    private Todo todo;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "cards_id")
+  private Long id;
 
-    private String name;
-    private String description;
-    private String color;
-    private int cardOrder;
-    private LocalDateTime deadline;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "todo_id")
+  private Todo todo;
+
+  @Column(nullable = false)
+  private String name;
+
+  @Column(nullable = false)
+  private String description;
+
+  @Column(nullable = false)
+  private String color;
+
+  @Column(nullable = false)
+  private int cardOrder;
+
+  @Column(nullable = false)
+  private LocalDateTime deadline;
+
+  public ResponseCardForm createCardResponseDto(){
+    return ResponseCardForm.builder()
+        .name(this.name)
+        .description(this.description)
+        .color(this.color)
+        .deadline(this.deadline)
+        .build();
+  }
+
+  public boolean isNotTodoMatch(Todo todo) {
+    return !this.todo.equals(todo);
+  }
 
 
 }

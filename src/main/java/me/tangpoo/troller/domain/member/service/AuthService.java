@@ -27,7 +27,7 @@ public class AuthService {
     public TokenDto login(LoginRequest loginRequest) {
         Member member = findMemberByUsername(loginRequest.getUsername());
 
-        if(!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())){
+        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
             throw new AccessDeniedException("비밀번호가 일치하지 않습니다.");
         }
 
@@ -47,7 +47,7 @@ public class AuthService {
     }
 
     public void logout(Member member, String refreshToken) {
-        if(!jwtUtil.validateToken(refreshToken)) {
+        if (!jwtUtil.validateToken(refreshToken)) {
             throw new UnAuthorizationException("[ERROR] 유효하지 않은 Refresh Token 입니다.");
         }
 

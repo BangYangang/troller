@@ -57,7 +57,6 @@ public class MemberService {
     }
 
 
-
     @Transactional
     public void updateMember(Long memberId, MemberRequest memberRequest) {
         Member findMember = getFindMember(memberId);
