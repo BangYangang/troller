@@ -10,12 +10,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.tangpoo.troller.domain.card.dto.ResponseCardDetailForm;
 import me.tangpoo.troller.domain.card.dto.ResponseCardForm;
 import me.tangpoo.troller.domain.card.dto.UpdateCardForm;
+import me.tangpoo.troller.domain.comment.dto.ResponseCommentForm;
 import me.tangpoo.troller.domain.todo.entity.Todo;
 
 @Entity
@@ -56,6 +59,16 @@ public class Card {
         .description(this.description)
         .color(this.color)
         .deadline(this.deadline)
+        .build();
+  }
+
+  public ResponseCardDetailForm createCardDetailForm(List<ResponseCommentForm> comments){
+    return ResponseCardDetailForm.builder()
+        .name(this.name)
+        .description(this.description)
+        .color(this.color)
+        .deadline(this.deadline)
+        .comments(comments)
         .build();
   }
 

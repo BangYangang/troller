@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.tangpoo.troller.domain.card.entity.Card;
 import me.tangpoo.troller.domain.comment.dto.CommentForm;
+import me.tangpoo.troller.domain.comment.dto.ResponseCommentForm;
 import me.tangpoo.troller.domain.member.entity.Member;
 
 @Entity
@@ -40,5 +41,9 @@ public class Comment {
 
     public void update(CommentForm dto) {
         this.content = dto.getContent();
+    }
+
+    public ResponseCommentForm createResponseComment(){
+        return new ResponseCommentForm(this.member.getUsername(), this.content);
     }
 }
