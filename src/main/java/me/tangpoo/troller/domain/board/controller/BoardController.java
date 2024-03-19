@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.board.dto.BoardRequestDto;
 import me.tangpoo.troller.domain.board.dto.BoardResponseDto;
+import me.tangpoo.troller.domain.board.dto.BoardsResponseDto;
 import me.tangpoo.troller.domain.board.service.BoardService;
 import me.tangpoo.troller.global.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class BoardController {
     }
 
     @GetMapping
-    public List<BoardResponseDto> readAllBoard(
+    public List<BoardsResponseDto> readAllBoard(
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.readAllBoard(userDetails.getMember());
     }

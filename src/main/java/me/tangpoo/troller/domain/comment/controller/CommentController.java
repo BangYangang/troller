@@ -20,40 +20,45 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/boards/{boardId}/todos/{todoId}/cards/{cardId}/comments")
 public class CommentController {
 
-  private final CommentService commentService;
+    private final CommentService commentService;
 
-  @PostMapping
-  public ResponseEntity<String> createComment(
-      @AuthenticationPrincipal UserDetails userDetails,
-      @PathVariable Long boardId,
-      @PathVariable Long todoId,
-      @PathVariable Long cardId,
-      @RequestBody @Validated CommentForm dto
-  ){
-    return ResponseEntity.status(201)
-        .body(commentService.create(userDetails.getUsername(), boardId, todoId, cardId, dto));
-  }
-  @PutMapping("/{commentId}")
-  public ResponseEntity<String> updateComment(
-      @AuthenticationPrincipal UserDetails userDetails,
-      @PathVariable Long boardId,
-      @PathVariable Long todoId,
-      @PathVariable Long cardId,
-      @PathVariable Long commentId,
-      @RequestBody @Validated CommentForm dto
-  ){
-    return ResponseEntity.status(201)
-        .body(commentService.update(userDetails.getUsername(), boardId, todoId, cardId, commentId, dto));
-  }
-  @DeleteMapping("/{commentId}")
-  public ResponseEntity<String> deleteComment(
-      @AuthenticationPrincipal UserDetails userDetails,
-      @PathVariable Long boardId,
-      @PathVariable Long todoId,
-      @PathVariable Long cardId,
-      @PathVariable Long commentId
-  ){
-    return ResponseEntity.status(201)
-        .body(commentService.delete(userDetails.getUsername(), boardId, todoId, cardId, commentId));
-  }
+    @PostMapping
+    public ResponseEntity<String> createComment(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @PathVariable Long boardId,
+        @PathVariable Long todoId,
+        @PathVariable Long cardId,
+        @RequestBody @Validated CommentForm dto
+    ) {
+        return ResponseEntity.status(201)
+            .body(commentService.create(userDetails.getUsername(), boardId, todoId, cardId, dto));
+    }
+
+    @PutMapping("/{commentId}")
+    public ResponseEntity<String> updateComment(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @PathVariable Long boardId,
+        @PathVariable Long todoId,
+        @PathVariable Long cardId,
+        @PathVariable Long commentId,
+        @RequestBody @Validated CommentForm dto
+    ) {
+        return ResponseEntity.status(201)
+            .body(
+                commentService.update(userDetails.getUsername(), boardId, todoId, cardId, commentId,
+                    dto));
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(
+        @AuthenticationPrincipal UserDetails userDetails,
+        @PathVariable Long boardId,
+        @PathVariable Long todoId,
+        @PathVariable Long cardId,
+        @PathVariable Long commentId
+    ) {
+        return ResponseEntity.status(201)
+            .body(commentService.delete(userDetails.getUsername(), boardId, todoId, cardId,
+                commentId));
+    }
 }

@@ -9,19 +9,16 @@ import me.tangpoo.troller.domain.todo.entity.Todo;
 
 @Getter
 @NoArgsConstructor
-public class BoardResponseDto {
+public class BoardsResponseDto {
 
     private String title;
     private String description;
     private String color;
-    private List<TodoResponse> todos;
-    private List<CardResponse> cards;
 
-    public BoardResponseDto(Board board, List<TodoResponse> todos, List<CardResponse> cards) {
+
+    public BoardsResponseDto(Board board) {
         this.title = board.getTitle();
         this.description = board.getDescription();
         this.color = board.getColor();
-        this.todos = todos;
-        this.cards = cards;
     }
 }

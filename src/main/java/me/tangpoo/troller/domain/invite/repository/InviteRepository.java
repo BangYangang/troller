@@ -12,4 +12,6 @@ public interface InviteRepository extends JpaRepository<Invite, Long> {
     List<Invite> findAllByMember(Member register);
 
     boolean existsByBoard_BoardIdAndMember_MemberId(Long boardId, Long memberId);
+
+    Invite findByBoard_BoardIdAndMember_MemberId(Long boardId, Long memberId);
 }
