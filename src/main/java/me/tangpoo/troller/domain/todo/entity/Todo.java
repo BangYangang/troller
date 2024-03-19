@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.tangpoo.troller.domain.board.entity.Board;
+import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 
 @Entity
 @Getter
@@ -26,17 +27,22 @@ public class Todo {
 
     private String todoName;
 
-    private String todoOrder;
-    public Todo(Board board, String todoName, String todoOrder) {
-        this.board = board;
-        this.todoName = todoName;
-        this.todoOrder = todoOrder;
-    }
+    private Long todoOrder;
 
     public boolean isNotBoardMatch(Board board){
         return !this.board.equals(board);
     }
+    
+    public Todo(Board board, String todoName) {
+        this.board = board;
+        this.todoName = todoName;
+    }
 
+    public void update(TodoRequestDto todoRequestDto) {
+        this.todoName = todoRequestDto.getTodoName();
+    }
 
-
+    public void updateNumber(Long number) {
+        this.todoOrder = number;
+    }
 }
