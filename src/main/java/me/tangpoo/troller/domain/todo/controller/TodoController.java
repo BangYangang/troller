@@ -36,15 +36,17 @@ public class TodoController {
 
     @PutMapping("/{todo_id}")
     public ResponseEntity<String> updateTodo(@PathVariable Long board_id,
-        @PathVariable Long todo_id, @RequestBody TodoRequestDto todoRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        todoService.updateTodo(board_id, todo_id, todoRequestDto,userDetails.getMember().getMemberId());
+        @PathVariable Long todo_id, @RequestBody TodoRequestDto todoRequestDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        todoService.updateTodo(board_id, todo_id, todoRequestDto,
+            userDetails.getMember().getMemberId());
         return new ResponseEntity<>("Todo 수정 성공", HttpStatus.OK);
     }
 
     @DeleteMapping("/{todo_id}")
     public ResponseEntity<String> deleteTodo(@PathVariable Long board_id,
-        @PathVariable Long todo_id,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        todoService.deleteTodo(board_id, todo_id,userDetails.getMember().getMemberId());
+        @PathVariable Long todo_id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        todoService.deleteTodo(board_id, todo_id, userDetails.getMember().getMemberId());
         return new ResponseEntity<>("Todo 삭제 성공", HttpStatus.NO_CONTENT);
     }
 

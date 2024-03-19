@@ -34,7 +34,7 @@ public class MemberService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public void saveMember(MemberRequest memberRequest){
+    public void saveMember(MemberRequest memberRequest) {
         validateDuplicateUsername(memberRequest.getUsername());
 
         Member member = Member.builder()
@@ -47,15 +47,15 @@ public class MemberService {
     }
 
     private void validateDuplicateUsername(String username) {
-        if(memberRepository.findByUsername(username).isPresent()){
+        if (memberRepository.findByUsername(username).isPresent()) {
             throw new DataIntegrityViolationException("이미 존재하는 회원명 입니다.");
         }
     }
 
     public MemberResponse getMember(Long memberId) {
         return queryFactory.select(fields(MemberResponse.class,
-            member.username,
-            member.email))
+                member.username,
+                member.email))
             .from(member)
             .where(member.memberId.eq(memberId))
             .fetchOne();

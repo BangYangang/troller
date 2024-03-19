@@ -33,9 +33,10 @@ public class BoardService {
             .orElseThrow(() -> new NoSuchElementException("보드가 존재하지 않습니다."));
         Member user = memberRepository.findById(member.getMemberId())
             .orElseThrow(() -> new NoSuchElementException("가입되어 있지 않습니다."));
-        Invite invite = inviteRepository.findByBoard_BoardIdAndMember_MemberId(board.getBoardId(), user.getMemberId());
+        Invite invite = inviteRepository.findByBoard_BoardIdAndMember_MemberId(board.getBoardId(),
+            user.getMemberId());
         if (!(board.getMember()).equals(user)) {
-            if(!(invite.getMember().equals(user))) {
+            if (!(invite.getMember().equals(user))) {
                 throw new IllegalArgumentException("본인의 보드가 아닙니다.");
             }
         }

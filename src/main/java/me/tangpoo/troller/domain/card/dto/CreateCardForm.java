@@ -15,14 +15,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 @AllArgsConstructor
 public class CreateCardForm {
 
-  @NotBlank
-  private String name;
+    @NotBlank
+    private String name;
 
-  @NotBlank
-  private String description;
+    @NotBlank
+    private String description;
 
 
-  @NotBlank
-  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-  private LocalDateTime deadline;
+    @NotBlank
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime deadline;
 }

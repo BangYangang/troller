@@ -56,7 +56,7 @@ public class AuthService {
             () -> new NoSuchElementException("유저 정보가 일치하지 않습니다.")
         ).getUsername();
 
-        if(!tokenUsername.equals(entityUsername)){
+        if (!tokenUsername.equals(entityUsername)) {
             throw new UnAuthorizationException("[ERROR] 로그인한 사용자의 Refresh Token 이 아닙니다.");
         }
 
@@ -69,7 +69,7 @@ public class AuthService {
 
     private Member findMemberByUsername(String username) {
         return memberRepository.findByUsername(username).orElseThrow(
-                () -> new NoSuchElementException("유저 정보가 일치하지 않습니다.")
-            );
+            () -> new NoSuchElementException("유저 정보가 일치하지 않습니다.")
+        );
     }
 }

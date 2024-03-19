@@ -23,47 +23,47 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/boards/{boardId}/todos/{todoId}/cards")
 public class CardController {
 
-  private final CardService cardService;
+    private final CardService cardService;
 
-  @PostMapping
-  public ResponseEntity<String> createCard(
-      @PathVariable Long boardId,
-      @PathVariable Long todoId,
-      @Validated @RequestBody CreateCardForm dto
-  ) {
-    return ResponseEntity.status(201)
-        .body(cardService.create(boardId, todoId, dto));
-  }
+    @PostMapping
+    public ResponseEntity<String> createCard(
+        @PathVariable Long boardId,
+        @PathVariable Long todoId,
+        @Validated @RequestBody CreateCardForm dto
+    ) {
+        return ResponseEntity.status(201)
+            .body(cardService.create(boardId, todoId, dto));
+    }
 
-  @GetMapping("/{cardId}")
-  public ResponseEntity<ResponseCardForm> getCard(
-      @PathVariable Long boardId,
-      @PathVariable Long todoId,
-      @PathVariable Long cardId
-  ) {
+    @GetMapping("/{cardId}")
+    public ResponseEntity<ResponseCardForm> getCard(
+        @PathVariable Long boardId,
+        @PathVariable Long todoId,
+        @PathVariable Long cardId
+    ) {
 
-    return ResponseEntity.status(201)
-        .body(cardService.get(boardId, todoId, cardId));
-  }
+        return ResponseEntity.status(201)
+            .body(cardService.get(boardId, todoId, cardId));
+    }
 
-  @PutMapping("/{cardId}")
-  public ResponseEntity<ResponseCardForm> updateCard(
-      @PathVariable Long boardId,
-      @PathVariable Long cardId,
-      @PathVariable Long todoId,
-      @Validated @RequestBody UpdateCardForm dto
-  ){
-    return ResponseEntity.status(201)
-        .body(cardService.update(boardId, cardId, todoId, dto));
-  }
+    @PutMapping("/{cardId}")
+    public ResponseEntity<ResponseCardForm> updateCard(
+        @PathVariable Long boardId,
+        @PathVariable Long cardId,
+        @PathVariable Long todoId,
+        @Validated @RequestBody UpdateCardForm dto
+    ) {
+        return ResponseEntity.status(201)
+            .body(cardService.update(boardId, cardId, todoId, dto));
+    }
 
-  @DeleteMapping("/{cardId}")
-  public ResponseEntity<String> delete(
-      @PathVariable Long boardId,
-      @PathVariable Long todoId,
-      @PathVariable Long cardId
-  ){
-    return ResponseEntity.status(201)
-        .body(cardService.delete(boardId, todoId, cardId));
-  }
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity<String> delete(
+        @PathVariable Long boardId,
+        @PathVariable Long todoId,
+        @PathVariable Long cardId
+    ) {
+        return ResponseEntity.status(201)
+            .body(cardService.delete(boardId, todoId, cardId));
+    }
 }
