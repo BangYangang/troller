@@ -10,12 +10,12 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.tangpoo.troller.domain.board.entity.Board;
+import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 
 @Entity
 @Getter
 @NoArgsConstructor
 public class Todo {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,7 +27,19 @@ public class Todo {
 
     private String todoName;
 
-    private String todoOrder;
+    private Long todoOrder;
 
 
+    public Todo(Board board, String todoName) {
+        this.board = board;
+        this.todoName = todoName;
+    }
+
+    public void update(TodoRequestDto todoRequestDto) {
+        this.todoName = todoRequestDto.getTodoName();
+    }
+
+    public void updateNumber(Long number) {
+        this.todoOrder = number;
+    }
 }
