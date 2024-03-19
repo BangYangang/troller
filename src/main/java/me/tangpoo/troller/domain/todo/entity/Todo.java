@@ -27,6 +27,15 @@ public class Todo {
     private String todoName;
 
     private String todoOrder;
+    public Todo(Board board, String todoName, String todoOrder) {
+        this.board = board;
+        this.todoName = todoName;
+        this.todoOrder = todoOrder;
+    }
+
+    public boolean isNotBoardMatch(Board board){
+        return !this.board.equals(board);
+    }
 
 
 
