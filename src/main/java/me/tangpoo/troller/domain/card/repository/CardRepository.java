@@ -1,5 +1,6 @@
 package me.tangpoo.troller.domain.card.repository;
 
+import java.util.Optional;
 import me.tangpoo.troller.domain.card.entity.Card;
 import me.tangpoo.troller.domain.todo.entity.Todo;
 import org.springframework.data.jpa.repository.JpaRepository;

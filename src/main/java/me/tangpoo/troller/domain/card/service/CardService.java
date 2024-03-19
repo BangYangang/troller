@@ -6,14 +6,17 @@ import me.tangpoo.troller.domain.board.entity.Board;
 import me.tangpoo.troller.domain.board.repository.BoardRepository;
 import me.tangpoo.troller.domain.card.dto.CreateCardForm;
 import me.tangpoo.troller.domain.card.dto.ResponseCardForm;
+import me.tangpoo.troller.domain.card.dto.UpdateCardForm;
 import me.tangpoo.troller.domain.card.entity.Card;
 import me.tangpoo.troller.domain.card.repository.CardRepository;
 import me.tangpoo.troller.domain.todo.entity.Todo;
 import me.tangpoo.troller.domain.todo.repository.TodoRepository;
 import me.tangpoo.troller.global.exception.custom.EntityNotMatchException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CardService {
 
@@ -21,6 +24,7 @@ public class CardService {
   private final BoardRepository boardRepository;
   private final TodoRepository todoRepository;
 
+  @Transactional
   public String create(Long boardId, Long todoId, CreateCardForm dto) {
     Board board = findBoardBy(boardId);
     Todo todo = findTodoBy(todoId);
@@ -36,6 +40,7 @@ public class CardService {
             .color("black")
             .name(dto.getName())
             .description(dto.getDescription())
+            .deadline(dto.getDeadline())
             .build()
     );
 
@@ -53,6 +58,7 @@ public class CardService {
     return card.createCardResponseDto();
   }
 
+  @Transactional
   public String delete(Long boardId, Long todoId, Long cardId) {
     Board board = findBoardBy(boardId);
     Todo todo = findTodoBy(todoId);
@@ -65,6 +71,20 @@ public class CardService {
     return "삭제가 완료되었습니다!";
   }
 
+
+  @Transactional
+  public ResponseCardForm update(Long boardId, Long cardId, Long todoId, UpdateCardForm dto) {
+    Board board = findBoardBy(boardId);
+    Todo todo = findTodoBy(todoId);
+    Card card = findCardBy(cardId);
+
+    boardMatchValidate(todo, board);
+    todoMatchValidate(card, todo);
+
+    card.update(dto);
+
+    return card.createCardResponseDto();
+  }
 
   private Card findCardBy(Long cardId) {
     return cardRepository.findById(cardId).orElseThrow(

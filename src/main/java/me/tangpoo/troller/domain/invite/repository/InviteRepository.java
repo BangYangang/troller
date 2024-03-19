@@ -10,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface InviteRepository extends JpaRepository<Invite, Long> {
 
     List<Invite> findAllByMember(Member register);
+
+    boolean existsByBoard_BoardIdAndMember_MemberId(Long boardId, Long memberId);
 }

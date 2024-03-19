@@ -21,6 +21,5 @@ public class UpdateCardForm {
   @NotBlank
   private String color;
 
-  @NotBlank
   private LocalDateTime deadline;
 }
