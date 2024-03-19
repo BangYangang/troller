@@ -7,6 +7,7 @@ import me.tangpoo.troller.domain.card.dto.ResponseCardForm;
 import me.tangpoo.troller.domain.card.dto.UpdateCardForm;
 import me.tangpoo.troller.domain.card.service.CardService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,7 @@ public class CardController {
   public ResponseEntity<String> createCard(
       @PathVariable Long boardId,
       @PathVariable Long todoId,
-      @RequestBody CreateCardForm dto
+      @Validated @RequestBody CreateCardForm dto
   ) {
     return ResponseEntity.status(201)
         .body(cardService.create(boardId, todoId, dto));
@@ -50,7 +51,7 @@ public class CardController {
       @PathVariable Long boardId,
       @PathVariable Long cardId,
       @PathVariable Long todoId,
-      @RequestBody UpdateCardForm dto
+      @Validated @RequestBody UpdateCardForm dto
   ){
     return ResponseEntity.status(201)
         .body(cardService.update(boardId, cardId, todoId, dto));
