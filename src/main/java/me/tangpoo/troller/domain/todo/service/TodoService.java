@@ -7,7 +7,7 @@ import me.tangpoo.troller.domain.todo.dto.ToDoResponse;
 import me.tangpoo.troller.domain.todo.dto.TodoMoveRequestDto;
 import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 import me.tangpoo.troller.domain.todo.entity.Todo;
-import me.tangpoo.troller.domain.todo.repository.Todorepository;
+import me.tangpoo.troller.domain.todo.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TodoService {
 
-    private final Todorepository todorepository;
+    private final TodoRepository todorepository;
     private final BoardRepository boardRepository;
 
     /**
