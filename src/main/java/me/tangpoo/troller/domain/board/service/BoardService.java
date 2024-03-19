@@ -31,11 +31,15 @@ public class BoardService {
     public BoardResponseDto readBoard(Member member, Long boardId) {
         Board board = boardRepository.findById(boardId)
             .orElseThrow(() -> new NoSuchElementException("보드가 존재하지 않습니다."));
-        Member master = memberRepository.findById(member.getMemberId())
+        Member user = memberRepository.findById(member.getMemberId())
             .orElseThrow(() -> new NoSuchElementException("가입되어 있지 않습니다."));
-        if (!(board.getMember()).equals(master)) {
-            throw new IllegalArgumentException("본인의 보드가 아닙니다.");
+        Invite invite = inviteRepository.findByBoard_BoardIdAndMember_MemberId(board.getBoardId(), user.getMemberId());
+        if (!(board.getMember()).equals(user)) {
+            if(!(invite.getMember().equals(user))) {
+                throw new IllegalArgumentException("본인의 보드가 아닙니다.");
+            }
         }
+
         return new BoardResponseDto(board);
     }
 
