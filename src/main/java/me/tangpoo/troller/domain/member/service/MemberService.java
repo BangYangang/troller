@@ -19,7 +19,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void saveMember(MemberRequest memberRequest){
+    public void saveMember(MemberRequest memberRequest) {
         Member member = Member.builder()
             .username(memberRequest.getUsername())
             .email(memberRequest.getEmail())
@@ -34,7 +34,6 @@ public class MemberService {
 
         return new MemberResponse(findMember.getUsername(), findMember.getUsername());
     }
-
 
 
     @Transactional

@@ -14,9 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.tangpoo.troller.domain.card.dto.ResponseCardForm;
 import me.tangpoo.troller.domain.todo.entity.Todo;
-import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter

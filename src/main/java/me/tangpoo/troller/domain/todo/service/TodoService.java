@@ -23,17 +23,19 @@ public class TodoService {
 
     /**
      * Todo 생성
+     *
      * @param requestDto todo 생성 요청정보
-     * @param boardId 보드 아이디
+     * @param boardId    보드 아이디
      */
     public void createTodo(Long boardId, TodoRequestDto requestDto) {
         Board board = findBoardId(boardId);
-        todorepository.save(new Todo(board,requestDto.getTodoName()));
+        todorepository.save(new Todo(board, requestDto.getTodoName()));
     }
 
 
     /**
      * Todo 조회
+     *
      * @param boardId 보드 아이디
      * @return todo 조회 결과
      */
@@ -45,19 +47,20 @@ public class TodoService {
         for (Todo todo : todoList) {
             toDoResponseList.add(new ToDoResponse(todo));
         }
-        return  toDoResponseList;
+        return toDoResponseList;
 
     }
 
     /**
      * Todo 수정
-     * @param boardId 보드 아이디
-     * @param todoId todo 아이디
+     *
+     * @param boardId        보드 아이디
+     * @param todoId         todo 아이디
      * @param todoRequestDto 수정 요청 정보
      */
     @Transactional
     public void updateTodo(Long boardId, Long todoId, TodoRequestDto todoRequestDto) {
-        Todo findTodo = findTodo(boardId,todoId);
+        Todo findTodo = findTodo(boardId, todoId);
 
         findTodo.update(todoRequestDto);
 
@@ -65,8 +68,9 @@ public class TodoService {
 
     /**
      * Todo 삭제
+     *
      * @param boardId 보드 아이디
-     * @param todoId todo 아이디
+     * @param todoId  todo 아이디
      */
     @Transactional
     public void deleteTodo(Long boardId, Long todoId) {
@@ -75,19 +79,19 @@ public class TodoService {
     }
 
 
-
     private Board findBoardId(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(() ->
-                new IllegalArgumentException("선택한 보드는 존재하지 않습니다."));
+            new IllegalArgumentException("선택한 보드는 존재하지 않습니다."));
     }
 
 
-    private Todo findTodo(Long boardId, Long todoId){
+    private Todo findTodo(Long boardId, Long todoId) {
         Todo findTodo = todorepository.findById(todoId).orElseThrow(() ->
-                new IllegalArgumentException("선택한 todo는 존재하지 않습니다."));
+            new IllegalArgumentException("선택한 todo는 존재하지 않습니다."));
 
-        if (!findTodo.getBoard().getBoardId().equals(boardId))
+        if (!findTodo.getBoard().getBoardId().equals(boardId)) {
             throw new IllegalArgumentException("선택한 보드의 todo가 아닙니다.");
+        }
 
         return findTodo;
     }
@@ -101,12 +105,12 @@ public class TodoService {
 
         for (TodoMoveRequestDto request : todoRequestDto.getDtoList()) {
 
-            for (Todo todo : todoList){
-                if (todo.getId().equals(request.getTodoId())){
+            for (Todo todo : todoList) {
+                if (todo.getId().equals(request.getTodoId())) {
                     todo.updateNumber(request.getNumber());
                 }
             }
 
         }
-        }
+    }
 }

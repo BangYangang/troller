@@ -1,41 +1,45 @@
-package me.tangpoo.troller.domain.member.entity;
+package me.tangpoo.troller.domain.invite.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+import me.tangpoo.troller.domain.board.entity.Board;
+import me.tangpoo.troller.domain.member.entity.Member;
+
 @Entity
+@Getter
 @NoArgsConstructor
-@Table(name = "refresh_token")
-public class RefreshToken {
+@AllArgsConstructor
+@Builder
+@Table(name = "invite")
+public class Invite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "invite_id")
     private Long id;
-
-    @NotNull
-    private String refreshToken;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Builder
-    public RefreshToken(String refreshToken, Member member) {
-        this.refreshToken = refreshToken;
-        this.member = member;
-    }
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
 
-    public void updateToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+    public Invite(Member inviteMember, Board board) {
+        this.member = inviteMember;
+        this.board = board;
     }
 }

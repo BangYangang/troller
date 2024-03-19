@@ -16,6 +16,7 @@ import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 @Getter
 @NoArgsConstructor
 public class Todo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
