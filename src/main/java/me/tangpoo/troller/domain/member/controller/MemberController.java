@@ -1,9 +1,13 @@
 package me.tangpoo.troller.domain.member.controller;
 
+import static me.tangpoo.troller.global.JwtUtil.AUTHORIZATION_HEADER;
+import static me.tangpoo.troller.global.JwtUtil.REFRESH_TOKEN;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.member.dto.MemberResponse;
 import me.tangpoo.troller.domain.member.dto.MemberRequest;
+import me.tangpoo.troller.domain.member.dto.TokenDto;
 import me.tangpoo.troller.domain.member.service.MemberService;
 import me.tangpoo.troller.global.UserDetailsImpl;
 import org.springframework.http.HttpStatus;
@@ -42,9 +46,13 @@ public class MemberController {
     public ResponseEntity<String> updateMember(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @Valid @RequestBody MemberRequest memberRequest) {
-        memberService.updateMember(userDetails.getMember().getMemberId(), memberRequest);
+        TokenDto token = memberService.updateMember(userDetails.getMember().getMemberId(),
+            memberRequest);
 
-        return new ResponseEntity<>("유저 정보 수정 성공", HttpStatus.OK);
+        return ResponseEntity.ok()
+            .header(AUTHORIZATION_HEADER, token.getAccessToken())
+            .header(REFRESH_TOKEN, token.getRefreshToken())
+            .body("회원정보 수정 성공");
     }
 
     @DeleteMapping
