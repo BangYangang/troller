@@ -7,6 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.tangpoo.troller.domain.board.entity.Board;
@@ -15,6 +19,9 @@ import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "todos")
 public class Todo {
 
     @Id
@@ -29,6 +36,10 @@ public class Todo {
     private String todoName;
 
     private Long todoOrder;
+
+
+    @Version
+    private int version;
 
     public boolean isNotBoardMatch(Board board) {
         return !this.board.equals(board);
