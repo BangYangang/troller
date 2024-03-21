@@ -10,6 +10,7 @@ import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 import me.tangpoo.troller.domain.todo.entity.Todo;
 import me.tangpoo.troller.domain.todo.repository.TodoQueryRepository;
 import me.tangpoo.troller.domain.todo.repository.TodoRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +43,7 @@ public class TodoService {
      * @param boardId 보드 아이디
      * @return todo 조회 결과
      */
+    @Cacheable(cacheNames = "getTodos", key = "#boardId", cacheManager = "rcm")
     public List<ToDoResponseDto> getTodos(Long boardId) {
 
         List<Todo> todoList = todoRepository.findByBoard_BoardId(boardId);
