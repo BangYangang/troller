@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({EntityNotFoundException.class,
         EntityNotMatchException.class
     })
-    public ResponseEntity<ExceptionForm> entityNotFoundExceptionHandler(LoginException e) {
+    public ResponseEntity<ExceptionForm> entityNotFoundExceptionHandler(Exception e) {
         return ResponseEntity.badRequest()
             .body(new ExceptionForm((HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST,
                 e.getMessage()));

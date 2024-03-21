@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.board.entity.Board;
 import me.tangpoo.troller.domain.board.repository.BoardRepository;
+import me.tangpoo.troller.domain.card.dto.CardMoveDto;
 import me.tangpoo.troller.domain.card.dto.CreateCardForm;
 import me.tangpoo.troller.domain.card.dto.ResponseCardDetailForm;
 import me.tangpoo.troller.domain.card.dto.ResponseCardForm;
@@ -38,7 +39,7 @@ public class CardService {
     Todo todo = findTodoBy(todoId);
 
     inviteCheckValidate(boardId, username);
-    boardMatchValidate(todo, board);
+    todoCheckValidate(todo, board);
 
     int orderNum = cardRepository.countCardsByTodo(todo) + 1;
 
@@ -63,8 +64,8 @@ public class CardService {
     Card card = findCardBy(cardId);
 
     inviteCheckValidate(boardId, username);
-    boardMatchValidate(todo, board);
-    todoMatchValidate(card, todo);
+    todoCheckValidate(todo, board);
+    cardCheckValidate(card, todo);
 
     List<ResponseCommentForm> getComments =
         commentRepository.findAllByCard_Id(cardId).stream().map(Comment::createResponseComment)
@@ -80,8 +81,8 @@ public class CardService {
     Card card = findCardBy(cardId);
 
     inviteCheckValidate(boardId, username);
-    boardMatchValidate(todo, board);
-    todoMatchValidate(card, todo);
+    todoCheckValidate(todo, board);
+    cardCheckValidate(card, todo);
 
     cardRepository.delete(card);
     return "삭제가 완료되었습니다!";
@@ -95,14 +96,31 @@ public class CardService {
     Card card = findCardBy(cardId);
 
     inviteCheckValidate(boardId, username);
-    boardMatchValidate(todo, board);
-    todoMatchValidate(card, todo);
+    todoCheckValidate(todo, board);
+    cardCheckValidate(card, todo);
 
     card.update(dto);
 
     return card.createCardResponseDto();
   }
 
+  @Transactional
+  public String move(Long boardId, Long todoId, Long cardId, String username, CardMoveDto dto) {
+    Board board = findBoardBy(boardId);
+    Todo todo = findTodoBy(todoId);
+    Card card = findCardBy(cardId);
+
+    inviteCheckValidate(boardId, username);
+    todoCheckValidate(todo, board);
+    cardCheckValidate(card, todo);
+
+    Todo nextTodo = findTodoBy(dto.getTodoId());
+    todoCheckValidate(nextTodo, board);
+
+    card.move(nextTodo);
+
+    return "성공!";
+  }
   private Card findCardBy(Long cardId) {
     return cardRepository.findById(cardId).orElseThrow(
         () -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다.")
@@ -121,13 +139,13 @@ public class CardService {
     );
   }
 
-  private void boardMatchValidate(Todo todo, Board board) {
+  private void todoCheckValidate(Todo todo, Board board) {
     if (todo.isNotBoardMatch(board)) {
       throw new EntityNotMatchException("해당 보드에 속한 컬럼이 아닙니다.");
     }
   }
 
-  private void todoMatchValidate(Card card, Todo todo) {
+  private void cardCheckValidate(Card card, Todo todo) {
     if (card.isNotTodoMatch(todo)) {
       throw new EntityNotMatchException("해당 컬럼에 속한 카드가 아닙니다.");
     }
@@ -138,6 +156,7 @@ public class CardService {
       throw new EntityNotMatchException("해당 보드에 초대된 유저가 아닙니다.");
     }
   }
+
 
 
 }

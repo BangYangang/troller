@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UpdateCardForm {
 
-    @NotBlank
-    private String name;
+  @NotBlank
+  private String name;
 
-    @NotBlank
-    private String description;
+  @NotBlank
+  private String description;
 
-    @NotBlank
-    private String color;
+  @NotBlank
+  private String color;
 
-    private LocalDateTime deadline;
+  private LocalDateTime deadline;
 }
