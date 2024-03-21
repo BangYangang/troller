@@ -7,9 +7,6 @@ import me.tangpoo.troller.domain.invite.entity.Invite;
 import me.tangpoo.troller.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface InviteRepository extends JpaRepository<Invite, Long> {
+public interface InviteRepository extends JpaRepository<Invite, Long>, InviteRepositoryT {
 
-    List<Invite> findAllByMember(Member register);
-
-    boolean existsByBoard_BoardIdAndMember_Username(Long boardId, String username);
 }

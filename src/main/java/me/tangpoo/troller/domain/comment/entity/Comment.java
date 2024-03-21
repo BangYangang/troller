@@ -43,7 +43,7 @@ public class Comment {
         this.content = dto.getContent();
     }
 
-    public ResponseCommentForm createResponseComment(){
+    public ResponseCommentForm createResponseComment() {
         return new ResponseCommentForm(this.member.getUsername(), this.content);
     }
 }

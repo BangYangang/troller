@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.board.dto.BoardRequestDto;
 import me.tangpoo.troller.domain.board.dto.BoardResponseDto;
@@ -45,23 +46,14 @@ public class BoardService {
             .orElseThrow(() -> new NoSuchElementException("가입되어 있지 않습니다."));
         Invite invite = inviteRepository.findByBoard_BoardIdAndMember_MemberId(board.getBoardId(),
             user.getMemberId());
-        if (!(board.getMember()).equals(user)) {
-            if (!(invite.getMember().equals(user))) {
-                throw new IllegalArgumentException("본인의 보드가 아닙니다.");
-            }
+        if (!board.getMember().equals(user) && !invite.getMember().equals(user)) {
+            throw new IllegalArgumentException("본인의 보드가 아닙니다.");
         }
         //정보 담기
         List<Todo> todos = todoRepository.findByBoard_BoardId(boardId);
-        List<TodoResponse> todosR = new ArrayList<>();
-        List<CardResponse> cardsR = new ArrayList<>();
-        List<Card> cards = new ArrayList<>();
-        for (Todo todo : todos) {
-            todosR.add(new TodoResponse(todo));
-            cards.addAll(cardRepository.findAllByTodo(todo));
-        }
-        for (Card card : cards) {
-            cardsR.add(new CardResponse(card));
-        }
+        List<TodoResponse> todosR = todos.stream().map(TodoResponse::new).toList();
+        List<Card> cards = cardRepository.findAllByTodoIn(todos);
+        List<CardResponse> cardsR = cards.stream().map(CardResponse::new).toList();
 
         return new BoardResponseDto(board, todosR, cardsR);
     }
@@ -92,15 +84,12 @@ public class BoardService {
     public List<BoardsResponseDto> readAllBoard(Member member) {
         Member register = memberRepository.findById(member.getMemberId())
             .orElseThrow(() -> new NoSuchElementException("멤버를 찾을 수 없습니다."));
-        List<BoardsResponseDto> boards = new ArrayList<>();
         List<Board> ownBoards = boardRepository.findAllByMember(register);
         List<Invite> invites = inviteRepository.findAllByMember(register);
-        for (Board board : ownBoards) {
-            boards.add((new BoardsResponseDto(board)));
-        }
-        for (Invite invite : invites) {
-            boards.add(new BoardsResponseDto(invite.getBoard()));
-        }
+        List<BoardsResponseDto> boards = new ArrayList<>(
+            ownBoards.stream().map(BoardsResponseDto::new).toList());
+        boards.addAll(invites.stream().map(invite -> new BoardsResponseDto(invite.getBoard()))
+            .toList());
 
         return boards;
     }
