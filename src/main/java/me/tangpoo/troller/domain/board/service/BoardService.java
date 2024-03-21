@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.board.dto.BoardRequestDto;
 import me.tangpoo.troller.domain.board.dto.BoardResponseDto;
@@ -45,22 +46,15 @@ public class BoardService {
             .orElseThrow(() -> new NoSuchElementException("가입되어 있지 않습니다."));
         Invite invite = inviteRepository.findByBoard_BoardIdAndMember_MemberId(board.getBoardId(),
             user.getMemberId());
-        if (!(board.getMember()).equals(user)) {
-            if (!(invite.getMember().equals(user))) {
-                throw new IllegalArgumentException("본인의 보드가 아닙니다.");
-            }
+        if (!board.getMember().equals(user) && !invite.getMember().equals(user)) {
+            throw new IllegalArgumentException("본인의 보드가 아닙니다.");
         }
         //정보 담기
         List<Todo> todos = todoRepository.findByBoard_BoardId(boardId);
-        List<TodoResponse> todosR = new ArrayList<>();
-        List<CardResponse> cardsR = new ArrayList<>();
+        List<TodoResponse> todosR = todos.stream().map(TodoResponse::new).toList();
         List<Card> cards = cardRepository.findAllByTodoIn(todos);
-        for (Todo todo : todos) {
-            todosR.add(new TodoResponse(todo));
-        }
-        for (Card card : cards) {
-            cardsR.add(new CardResponse(card));
-        }
+        List<CardResponse> cardsR = cards.stream().map(CardResponse::new).toList();
+
         return new BoardResponseDto(board, todosR, cardsR);
     }
 
