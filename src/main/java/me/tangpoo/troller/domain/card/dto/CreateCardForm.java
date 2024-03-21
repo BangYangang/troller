@@ -1,6 +1,10 @@
 package me.tangpoo.troller.domain.card.dto;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -23,6 +27,8 @@ public class CreateCardForm {
 
 
     @NotBlank
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime deadline;
 }
