@@ -84,15 +84,12 @@ public class BoardService {
     public List<BoardsResponseDto> readAllBoard(Member member) {
         Member register = memberRepository.findById(member.getMemberId())
             .orElseThrow(() -> new NoSuchElementException("멤버를 찾을 수 없습니다."));
-        List<BoardsResponseDto> boards = new ArrayList<>();
         List<Board> ownBoards = boardRepository.findAllByMember(register);
         List<Invite> invites = inviteRepository.findAllByMember(register);
-        for (Board board : ownBoards) {
-            boards.add((new BoardsResponseDto(board)));
-        }
-        for (Invite invite : invites) {
-            boards.add(new BoardsResponseDto(invite.getBoard()));
-        }
+        List<BoardsResponseDto> boards = new ArrayList<>(
+            ownBoards.stream().map(BoardsResponseDto::new).toList());
+        boards.addAll(invites.stream().map(invite -> new BoardsResponseDto(invite.getBoard()))
+            .toList());
 
         return boards;
     }
