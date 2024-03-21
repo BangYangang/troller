@@ -11,4 +11,6 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     int countCardsByTodo(Todo todo);
 
     List<Card> findAllByTodo(Todo todo);
+
+    List<Card> findAllByTodoIn(List<Todo> todos);
 }

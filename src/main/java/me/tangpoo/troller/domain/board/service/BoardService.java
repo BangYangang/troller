@@ -54,10 +54,9 @@ public class BoardService {
         List<Todo> todos = todoRepository.findByBoard_BoardId(boardId);
         List<TodoResponse> todosR = new ArrayList<>();
         List<CardResponse> cardsR = new ArrayList<>();
-        List<Card> cards = new ArrayList<>();
+        List<Card> cards = cardRepository.findAllByTodoIn(todos);
         for (Todo todo : todos) {
             todosR.add(new TodoResponse(todo));
-            cards.addAll(cardRepository.findAllByTodo(todo));
         }
         for (Card card : cards) {
             cardsR.add(new CardResponse(card));
