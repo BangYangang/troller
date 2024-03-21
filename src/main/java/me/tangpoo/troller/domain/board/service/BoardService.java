@@ -21,6 +21,7 @@ import me.tangpoo.troller.domain.member.entity.Member;
 import me.tangpoo.troller.domain.member.repository.MemberRepository;
 import me.tangpoo.troller.domain.todo.entity.Todo;
 import me.tangpoo.troller.domain.todo.repository.TodoRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -81,6 +82,7 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
+    @Cacheable(cacheNames = "readAllBoard", key = "#member.memberId", cacheManager = "rcm")
     public List<BoardsResponseDto> readAllBoard(Member member) {
         Member register = memberRepository.findById(member.getMemberId())
             .orElseThrow(() -> new NoSuchElementException("멤버를 찾을 수 없습니다."));

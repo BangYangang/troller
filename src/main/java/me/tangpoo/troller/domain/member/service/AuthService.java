@@ -13,6 +13,7 @@ import me.tangpoo.troller.global.exception.UnAuthorizationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
 
+    @Transactional
     public TokenDto login(LoginRequest loginRequest) {
         Member member = findMemberByUsername(loginRequest.getUsername());
 
@@ -38,7 +40,7 @@ public class AuthService {
             .member(member)
             .build();
 
-        refreshTokenRepository.findByMember(member).ifPresentOrElse(
+        refreshTokenRepository.findByMember_MemberId(member.getMemberId()).ifPresentOrElse(
             (findTokenPair) -> findTokenPair.updateToken(refreshToken),
             () -> refreshTokenRepository.save(tokenEntity)
         );
@@ -60,7 +62,7 @@ public class AuthService {
             throw new UnAuthorizationException("[ERROR] 로그인한 사용자의 Refresh Token 이 아닙니다.");
         }
 
-        RefreshToken findRefreshToken = refreshTokenRepository.findByMember(member).orElseThrow(
+        RefreshToken findRefreshToken = refreshTokenRepository.findByMember_MemberId(member.getMemberId()).orElseThrow(
             () -> new UnAuthorizationException("[ERROR] 이미 로그아웃 된 사용자입니다.")
         );
 
