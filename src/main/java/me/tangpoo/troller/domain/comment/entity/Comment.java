@@ -24,26 +24,26 @@ import me.tangpoo.troller.domain.member.entity.Member;
 @NoArgsConstructor
 public class Comment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "comment_id")
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id")
+  private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cards_id")
-    private Card card;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "cards_id")
+  private Card card;
 
-    private String content;
+  private String content;
 
-    public void update(CommentForm dto) {
-        this.content = dto.getContent();
-    }
+  public void update(CommentForm dto) {
+    this.content = dto.getContent();
+  }
 
-    public ResponseCommentForm createResponseComment() {
-        return new ResponseCommentForm(this.member.getUsername(), this.content);
-    }
+  public ResponseCommentForm createResponseComment() {
+    return new ResponseCommentForm(this.member.getUsername(), this.content);
+  }
 }

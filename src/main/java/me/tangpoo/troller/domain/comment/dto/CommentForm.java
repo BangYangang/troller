@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentForm {
 
-    @NotBlank(message = "내용을 입력해야 합니다.")
-    private String content;
+  @NotBlank(message = "내용을 입력해야 합니다.")
+  private String content;
 }

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResponseCommentForm {
 
-    private String username;
-    private String content;
+  private String username;
+  private String content;
 }
