@@ -29,60 +29,59 @@ import me.tangpoo.troller.domain.todo.entity.Todo;
 @Table(name = "cards")
 public class Card {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "cards_id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cards_id")
+    private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "todo_id")
-  private Todo todo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "todo_id")
+    private Todo todo;
 
-  @Column(nullable = false)
-  private String name;
+    @Column(nullable = false)
+    private String name;
 
-  @Column(nullable = false)
-  private String description;
+    @Column(nullable = false)
+    private String description;
 
-  @Column(nullable = false)
-  private String color;
+    @Column(nullable = false)
+    private String color;
 
-  @Column(nullable = false)
-  private int cardOrder;
+    @Column(nullable = false)
+    private int cardOrder;
 
-  @Column(nullable = false)
-  private LocalDateTime deadline;
+    @Column(nullable = false)
+    private LocalDateTime deadline;
 
-  public ResponseCardForm createCardResponseDto(){
-    return ResponseCardForm.builder()
-        .name(this.name)
-        .description(this.description)
-        .color(this.color)
-        .deadline(this.deadline)
-        .build();
-  }
+    public ResponseCardForm createCardResponseDto() {
+        return ResponseCardForm.builder()
+            .name(this.name)
+            .description(this.description)
+            .color(this.color)
+            .deadline(this.deadline)
+            .build();
+    }
 
-  public ResponseCardDetailForm createCardDetailForm(List<ResponseCommentForm> comments){
-    return ResponseCardDetailForm.builder()
-        .name(this.name)
-        .description(this.description)
-        .color(this.color)
-        .deadline(this.deadline)
-        .comments(comments)
-        .build();
-  }
+    public ResponseCardDetailForm createCardDetailForm(List<ResponseCommentForm> comments) {
+        return ResponseCardDetailForm.builder()
+            .name(this.name)
+            .description(this.description)
+            .color(this.color)
+            .deadline(this.deadline)
+            .comments(comments)
+            .build();
+    }
 
-  public void update(UpdateCardForm dto) {
-    this.name = dto.getName();
-    this.description = dto.getDescription();
-    this.color = dto.getColor();
-    this.deadline = dto.getDeadline() == null ? this.deadline : dto.getDeadline();
-  }
+    public void update(UpdateCardForm dto) {
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.color = dto.getColor();
+        this.deadline = dto.getDeadline() == null ? this.deadline : dto.getDeadline();
+    }
 
-  public boolean isNotTodoMatch(Todo todo) {
-    return !this.todo.equals(todo);
-  }
-
+    public boolean isNotTodoMatch(Todo todo) {
+        return !this.todo.equals(todo);
+    }
 
 
 }

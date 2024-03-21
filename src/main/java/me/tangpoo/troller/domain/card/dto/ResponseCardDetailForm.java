@@ -15,14 +15,14 @@ import me.tangpoo.troller.domain.comment.dto.ResponseCommentForm;
 @Builder
 public class ResponseCardDetailForm {
 
-  private String name;
+    private String name;
 
-  private String description;
+    private String description;
 
-  private String color;
+    private String color;
 
-  private LocalDateTime deadline;
+    private LocalDateTime deadline;
 
-  private List<ResponseCommentForm> comments;
+    private List<ResponseCommentForm> comments;
 
 }
