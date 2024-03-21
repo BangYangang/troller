@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResponseCardForm {
 
-  private String name;
-  private String description;
-  private String color;
-  private LocalDateTime deadline;
+    private String name;
+    private String description;
+    private String color;
+    private LocalDateTime deadline;
 }

@@ -61,7 +61,6 @@ public class BoardService {
         for (Card card : cards) {
             cardsR.add(new CardResponse(card));
         }
-
         return new BoardResponseDto(board, todosR, cardsR);
     }
 
