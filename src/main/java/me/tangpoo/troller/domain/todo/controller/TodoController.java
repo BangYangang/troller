@@ -52,8 +52,8 @@ public class TodoController {
 
 
     @PutMapping("/move")
-    public ResponseEntity<String> moveTodo(@PathVariable Long board_id,
-        @RequestBody TodoMoveRequestDto todoRequestDto) {
+    public ResponseEntity<String> moveTodo (@PathVariable Long board_id,
+        @RequestBody TodoMoveRequestDto todoRequestDto) throws  InterruptedException{
         todoService.moveTodo(board_id, todoRequestDto);
         return new ResponseEntity<>("Todo 이동 성공", HttpStatus.OK);
     }

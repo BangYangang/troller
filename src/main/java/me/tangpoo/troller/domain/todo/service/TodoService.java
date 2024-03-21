@@ -8,7 +8,9 @@ import me.tangpoo.troller.domain.todo.dto.ToDoResponseDto;
 import me.tangpoo.troller.domain.todo.dto.TodoMoveRequestDto;
 import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 import me.tangpoo.troller.domain.todo.entity.Todo;
+import me.tangpoo.troller.domain.todo.repository.TodoQueryRepository;
 import me.tangpoo.troller.domain.todo.repository.TodoRepository;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +23,7 @@ public class TodoService {
 
     private final TodoRepository todoRepository;
     private final BoardRepository boardRepository;
-
+    private final TodoQueryRepository todoQueryRepository;
     /**
      * Todo 생성
      *
@@ -108,18 +110,18 @@ public class TodoService {
     }
 
     @Transactional
-    public void moveTodo(Long boardId, TodoMoveRequestDto todoRequestDto) {
-
-        List<Todo> todoList = todoRepository.findByBoard_BoardId(boardId);
-
-        for (TodoMoveRequestDto request : todoRequestDto.getDtoList()) {
-
-            for (Todo todo : todoList) {
-                if (todo.getId().equals(request.getTodoId())) {
-                    todo.updateNumber(request.getNumber());
+    public void moveTodo(Long boardId, TodoMoveRequestDto todoRequestDto) throws InterruptedException{
+        while (true){
+            try{
+                for (TodoMoveRequestDto request : todoRequestDto.getDtoList()) {
+                    todoQueryRepository.updateOrder(request,boardId);
                 }
+                break;
+            }catch (ObjectOptimisticLockingFailureException e){
+                System.out.println("낙관 락");
+                Thread.sleep(50);
             }
-
         }
+
     }
 }
