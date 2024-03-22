@@ -1,0 +1,8 @@
+| Controller | Method | URL                              | Request Header              | Response                                  | Request                                                      |
+|------------|--------|----------------------------------|-----------------------------|-------------------------------------------|--------------------------------------------------------------|
+| 보드 생성      | POST   | /api/v1/boards                   | Authorization : accessToken | { "status" : 201, "message": "보드 생성 성공" } | { "title": "text", "description": "text", "color": "color" } |
+| 보드 초대      | POST   | /api/v1/boards/{board_id}/invite | Authorization : accessToken | { "status" : 201, "message": "보드 초대 성공" } |                                                              |
+| 보드 전체 조회   | GET    | /api/v1/boards                   | Authorization : accessToken |                                           |                                                              |
+| 보드 조회      | GET    | /api/v1/boards/{board_id}        | Authorization : accessToken |                                           |                                                              |
+| 보드 수정      | PUT    | /api/v1/boards/{board_id}        | Authorization : accessToken | { "status" : 201, "message": "보드 수정 성공" } | { "status" : 201, "message": "" }                            |
+| 보드 삭제      | DELETE | /api/v1/boards/{board_id}        | Authorization : accessToken | { "status" : 201, "message": "보드 삭제 성공" } |                                                              |
