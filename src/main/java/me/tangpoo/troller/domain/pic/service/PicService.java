@@ -24,7 +24,6 @@ public class PicService {
   private final CardRepository cardRepository;
   private final InviteRepository inviteRepository;
   public String join(Long boardId, Long cardId, String username, PicRequestDto dto) {
-    userValidate(boardId, username);
     userValidate(boardId, dto.getUsername());
     picValidate(cardId, dto.getUsername());
 
@@ -37,7 +36,7 @@ public class PicService {
   }
 
   private void picValidate(Long cardId, String username) {
-    if(!picRepository.existsByCard_IdAndMember_Username(cardId, username)){
+    if(picRepository.existsByCard_IdAndMember_Username(cardId, username)){
       throw new EntityExistsException("이미 속해있는 작업자입니다.");
     }
   }
