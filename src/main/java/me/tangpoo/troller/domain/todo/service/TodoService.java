@@ -1,5 +1,6 @@
 package me.tangpoo.troller.domain.todo.service;
 
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import me.tangpoo.troller.domain.board.entity.Board;
 import me.tangpoo.troller.domain.board.repository.BoardRepository;
@@ -10,6 +11,8 @@ import me.tangpoo.troller.domain.todo.dto.TodoRequestDto;
 import me.tangpoo.troller.domain.todo.entity.Todo;
 import me.tangpoo.troller.domain.todo.repository.TodoQueryRepository;
 import me.tangpoo.troller.domain.todo.repository.TodoRepository;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,9 @@ public class TodoService {
     private final TodoRepository todoRepository;
     private final BoardRepository boardRepository;
     private final TodoQueryRepository todoQueryRepository;
+    private final RedissonClient redissonClient;
+
+    private static final String LOCK_KEY = "counterLock";
     /**
      * Todo 생성
      *
@@ -67,11 +73,29 @@ public class TodoService {
      */
     @Transactional
     public void updateTodo(Long boardId, Long todoId, TodoRequestDto todoRequestDto,
-        Long memberId) {
-        // 해당 유저의 보드, todo 확인
-        Todo findTodo = findTodo(boardId, todoId, memberId);
+        Long memberId) throws InterruptedException{
 
-        findTodo.update(todoRequestDto);
+        RLock lock = redissonClient.getFairLock(LOCK_KEY);
+
+        try {
+            boolean isLocked = lock.tryLock(10, 60, TimeUnit.SECONDS);
+            if (isLocked) {
+                try {
+                    // 해당 유저의 보드, todo 확인
+                    Todo findTodo = findTodo(boardId, todoId, memberId);
+
+                    findTodo.update(todoRequestDto);
+                } finally {
+                    lock.unlock();
+                }
+            }
+        } catch (InterruptedException e) {
+
+            System.out.println("분산 락");
+            Thread.sleep(50);
+        }
+
+
 
     }
 
