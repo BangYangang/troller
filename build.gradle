@@ -45,6 +45,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    //Redisson
+    implementation("org.redisson:redisson-spring-boot-starter:3.19.0")
 }
 
 // gradle clean 시에 QClass 디렉토리 삭제
