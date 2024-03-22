@@ -37,7 +37,7 @@ public class TodoController {
     @PutMapping("/{todo_id}")
     public ResponseEntity<String> updateTodo(@PathVariable Long board_id,
         @PathVariable Long todo_id, @RequestBody TodoRequestDto todoRequestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) throws InterruptedException{
         todoService.updateTodo(board_id, todo_id, todoRequestDto,
             userDetails.getMember().getMemberId());
         return new ResponseEntity<>("Todo 수정 성공", HttpStatus.OK);
