@@ -49,7 +49,14 @@
 - 구현 방법
   - 클라이언트에서 카드를 드래그하여 순서를 변경하면, 변경된 순서를 서버로 전송합니다.
 - 트러블 슈팅
+  - 토큰은 유저명을 기준으로 생성되기에, 유저명을 수정하면 기존의 토큰이 유효하지 않게 되는 문제.
+  - Redis 사용시 Serializer/Deserializer 문제.
+  - docker 배포시 Server 와 Redis 가 다른 컨테이너라면 연결하지 못하는 문제.
 - 해결 방법
+  - 유저 정보 업데이트시에도 토큰을 발급한다.
+  - LocalDateTime 이 적용된 모든 필드에 @JsonSerialize, @JsonDeserialize 적용.
+  - Pageable 을 상속받는 RestPage 객체 구현.
+  - docker compose 를 통해 하나의 컨테이너에서 Server 와 Redis 를 관리.
                         
 ### 
 
