@@ -1,5 +1,6 @@
 package me.tangpoo.troller.global.exception;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -65,8 +66,10 @@ public class GlobalExceptionHandler {
                 e.getMessage()));
     }
 
-    @ExceptionHandler({EntityNotFoundException.class,
-        EntityNotMatchException.class
+    @ExceptionHandler({
+        EntityNotFoundException.class,
+        EntityNotMatchException.class,
+        EntityExistsException.class
     })
     public ResponseEntity<ExceptionForm> entityNotFoundExceptionHandler(Exception e) {
         return ResponseEntity.badRequest()
