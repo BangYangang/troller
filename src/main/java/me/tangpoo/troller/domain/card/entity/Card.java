@@ -1,5 +1,9 @@
 package me.tangpoo.troller.domain.card.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,29 +33,31 @@ import me.tangpoo.troller.domain.todo.entity.Todo;
 @Table(name = "cards")
 public class Card {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cards_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "cards_id")
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "todo_id")
-    private Todo todo;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "todo_id")
+  private Todo todo;
 
-    @Column(nullable = false)
-    private String name;
+  @Column(nullable = false)
+  private String name;
 
-    @Column(nullable = false)
-    private String description;
+  @Column(nullable = false)
+  private String description;
 
-    @Column(nullable = false)
-    private String color;
+  @Column(nullable = false)
+  private String color;
 
-    @Column(nullable = false)
-    private int cardOrder;
+  @Column(nullable = false)
+  private int cardOrder;
 
-    @Column(nullable = false)
-    private LocalDateTime deadline;
+  @Column(nullable = false)
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  private LocalDateTime deadline;
 
     public ResponseCardForm createCardResponseDto() {
         return ResponseCardForm.builder()
@@ -84,4 +90,7 @@ public class Card {
     }
 
 
+  public void move(Todo nextTodo) {
+      this.todo = nextTodo;
+  }
 }

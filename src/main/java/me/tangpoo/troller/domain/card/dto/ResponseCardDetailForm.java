@@ -1,5 +1,9 @@
 package me.tangpoo.troller.domain.card.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,14 +19,16 @@ import me.tangpoo.troller.domain.comment.dto.ResponseCommentForm;
 @Builder
 public class ResponseCardDetailForm {
 
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 
-    private String color;
+  private String color;
 
-    private LocalDateTime deadline;
+  @JsonSerialize(using = LocalDateTimeSerializer.class)
+  @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+  private LocalDateTime deadline;
 
-    private List<ResponseCommentForm> comments;
+  private List<ResponseCommentForm> comments;
 
 }

@@ -3,7 +3,6 @@ package me.tangpoo.troller.domain.member.service;
 import static com.querydsl.core.types.Projections.fields;
 import static me.tangpoo.troller.domain.member.entity.QMember.member;
 
-import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +14,6 @@ import me.tangpoo.troller.domain.member.entity.RefreshToken;
 import me.tangpoo.troller.domain.member.repository.MemberRepository;
 import me.tangpoo.troller.domain.member.repository.RefreshTokenRepository;
 import me.tangpoo.troller.global.JwtUtil;
-import org.springframework.dao.DataIntegrityViolationException;
-import me.tangpoo.troller.domain.member.repository.RefreshTokenRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -79,7 +76,7 @@ public class MemberService {
             .member(findMember)
             .build();
 
-        refreshTokenRepository.findByMember(findMember).ifPresentOrElse(
+        refreshTokenRepository.findByMember_MemberId(findMember.getMemberId()).ifPresentOrElse(
             (findTokenPair) -> findTokenPair.updateToken(refreshToken),
             () -> refreshTokenRepository.save(tokenEntity)
         );
