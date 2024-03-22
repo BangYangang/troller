@@ -90,5 +90,7 @@ public class Card {
     }
 
 
-
+  public void move(Todo nextTodo) {
+      this.todo = nextTodo;
+  }
 }

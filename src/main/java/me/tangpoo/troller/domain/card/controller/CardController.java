@@ -2,6 +2,7 @@ package me.tangpoo.troller.domain.card.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import me.tangpoo.troller.domain.card.dto.CardMoveDto;
 import me.tangpoo.troller.domain.card.dto.CreateCardForm;
 import me.tangpoo.troller.domain.card.dto.ResponseCardDetailForm;
 import me.tangpoo.troller.domain.card.dto.ResponseCardForm;
@@ -26,51 +27,63 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/boards/{boardId}/todos/{todoId}/cards")
 public class CardController {
 
-    private final CardService cardService;
+  private final CardService cardService;
 
-    @PostMapping
-    public ResponseEntity<String> createCard(
-        @AuthenticationPrincipal UserDetails userDetails,
-        @PathVariable Long boardId,
-        @PathVariable Long todoId,
-        @Validated @RequestBody CreateCardForm dto
-    ) {
-        return ResponseEntity.status(201)
-            .body(cardService.create(boardId, todoId, dto, userDetails.getUsername()));
-    }
+  @PostMapping
+  public ResponseEntity<String> createCard(
+      @AuthenticationPrincipal UserDetails userDetails,
+      @PathVariable Long boardId,
+      @PathVariable Long todoId,
+      @Validated @RequestBody CreateCardForm dto
+  ) {
+    return ResponseEntity.status(201)
+        .body(cardService.create(boardId, todoId, dto, userDetails.getUsername()));
+  }
 
-    @GetMapping("/{cardId}")
-    public ResponseEntity<ResponseCardDetailForm> getCard(
-        @AuthenticationPrincipal UserDetails userDetails,
-        @PathVariable Long boardId,
-        @PathVariable Long todoId,
-        @PathVariable Long cardId
-    ) {
+  @GetMapping("/{cardId}")
+  public ResponseEntity<ResponseCardDetailForm> getCard(
+      @AuthenticationPrincipal UserDetails userDetails,
+      @PathVariable Long boardId,
+      @PathVariable Long todoId,
+      @PathVariable Long cardId
+  ) {
 
-        return ResponseEntity.status(201)
-            .body(cardService.get(boardId, todoId, cardId, userDetails.getUsername()));
-    }
+    return ResponseEntity.status(201)
+        .body(cardService.get(boardId, todoId, cardId, userDetails.getUsername()));
+  }
 
-    @PutMapping("/{cardId}")
-    public ResponseEntity<ResponseCardForm> updateCard(
-        @AuthenticationPrincipal UserDetails userDetails,
-        @PathVariable Long boardId,
-        @PathVariable Long cardId,
-        @PathVariable Long todoId,
-        @Validated @RequestBody UpdateCardForm dto
-    ) {
-        return ResponseEntity.status(201)
-            .body(cardService.update(boardId, cardId, todoId, dto, userDetails.getUsername()));
-    }
+  @PutMapping("/{cardId}")
+  public ResponseEntity<ResponseCardForm> updateCard(
+      @AuthenticationPrincipal UserDetails userDetails,
+      @PathVariable Long boardId,
+      @PathVariable Long cardId,
+      @PathVariable Long todoId,
+      @Validated @RequestBody UpdateCardForm dto
+  ) {
+    return ResponseEntity.status(201)
+        .body(cardService.update(boardId, cardId, todoId, dto, userDetails.getUsername()));
+  }
 
-    @DeleteMapping("/{cardId}")
-    public ResponseEntity<String> delete(
-        @AuthenticationPrincipal UserDetails userDetails,
-        @PathVariable Long boardId,
-        @PathVariable Long todoId,
-        @PathVariable Long cardId
-    ) {
-        return ResponseEntity.status(201)
-            .body(cardService.delete(boardId, todoId, cardId, userDetails.getUsername()));
-    }
+  @DeleteMapping("/{cardId}")
+  public ResponseEntity<String> delete(
+      @AuthenticationPrincipal UserDetails userDetails,
+      @PathVariable Long boardId,
+      @PathVariable Long todoId,
+      @PathVariable Long cardId
+  ) {
+    return ResponseEntity.status(201)
+        .body(cardService.delete(boardId, todoId, cardId, userDetails.getUsername()));
+  }
+
+  @PostMapping("/{cardId}/move")
+  public ResponseEntity<String> move(
+      @AuthenticationPrincipal UserDetails userDetails,
+      @PathVariable Long boardId,
+      @PathVariable Long todoId,
+      @PathVariable Long cardId,
+      @RequestBody CardMoveDto dto
+  ) {
+    return ResponseEntity.status(201)
+        .body(cardService.move(boardId, todoId, cardId, userDetails.getUsername(), dto));
+  }
 }

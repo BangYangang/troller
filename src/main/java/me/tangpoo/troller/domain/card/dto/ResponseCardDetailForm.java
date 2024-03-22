@@ -19,16 +19,16 @@ import me.tangpoo.troller.domain.comment.dto.ResponseCommentForm;
 @Builder
 public class ResponseCardDetailForm {
 
-    private String name;
+  private String name;
 
-    private String description;
+  private String description;
 
-    private String color;
+  private String color;
 
   @JsonSerialize(using = LocalDateTimeSerializer.class)
   @JsonDeserialize(using = LocalDateTimeDeserializer.class)
   private LocalDateTime deadline;
 
-    private List<ResponseCommentForm> comments;
+  private List<ResponseCommentForm> comments;
 
 }
